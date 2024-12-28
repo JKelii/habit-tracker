@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,32 +19,44 @@ import { useRouter } from "next/navigation";
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
-type FormData = {
+import { yupResolver } from "@hookform/resolvers/yup";
+import { todoSchema } from "@/app/schema/newTodoSchema";
+import { DatePicker } from "./DatePicker";
+import { toast } from "sonner";
+
+export type FormData = {
   title: string;
+  deadline: Date;
 };
 
 export const AddToDo = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [date, setDate] = useState<Date>();
   const [isPending, startTransition] = useTransition();
 
-  const { register, handleSubmit } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: yupResolver(todoSchema),
+  });
 
   const user = useUser();
 
   const router = useRouter();
 
-  //TODO: Create a toaster and delete button, start transition?
-
   const onSubmit = async (data: FormData) => {
     const userId = user.user?.id;
-    if (userId) {
+    if (userId && date) {
       startTransition(async () => {
-        await createTodo(data.title, userId);
+        await createTodo(data.title, userId, date);
       });
 
       setIsOpen(false);
     }
     router.refresh();
+    toast("ToDo added to your list ✔");
   };
 
   return (
@@ -54,18 +67,40 @@ export const AddToDo = () => {
         </DialogTrigger>
         <DialogContent className="flex flex-col justify-center items-start w-96">
           <DialogHeader>
-            <DialogTitle>Add New ToDo</DialogTitle>
+            <DialogTitle>Add new ToDo</DialogTitle>
             <DialogDescription>
               Create a new todo item. Click save when you&apos;re done.
             </DialogDescription>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Label htmlFor="todo">Title</Label>
+          </DialogHeader>
+          <DialogFooter className="w-full">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="w-full justify-start flex flex-col items-center gap-2"
+            >
+              <Label htmlFor="todo" className="self-start my-1">
+                Title
+              </Label>
               <Input id="todo" {...register("title")} />
-              <Button className="self-end mt-2" disabled={isPending}>
+              {errors.title && (
+                <p className="text-sm text-red-500 py-1 font-semibold self-start">
+                  This field is required
+                </p>
+              )}
+              <div className="self-start w-full flex flex-col">
+                <Label htmlFor="date" className="self-start my-1">
+                  Deadline
+                </Label>
+                <DatePicker setDate={setDate} date={date} register={register} />
+              </div>
+              <Button
+                className="mt-4 self-end"
+                type="submit"
+                disabled={isPending}
+              >
                 Save to do
               </Button>
             </form>
-          </DialogHeader>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </section>

@@ -1,6 +1,7 @@
 "use client";
-import { deleteTodo } from "@/actions/todos";
-import { Button } from "@/components/ui/button";
+import { setCompleteStatus } from "@/actions/todos";
+
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -9,10 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-import React, { useTransition } from "react";
+import { DeleteTodo } from "./DeleteTodo";
+import { useRouter } from "next/navigation";
 
 type Todo = {
   id: number;
@@ -20,18 +21,15 @@ type Todo = {
   createdAt: Date;
   userId: string;
   completed: boolean;
+  toBeDone: Date;
 }[];
 
 export const TodosList = ({ todos }: { todos: Todo }) => {
-  //TODO: Upgrade visuals, table
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const deleteTodoById = (id: number) => {
+  const setStatus = async (id: number, complete: boolean) => {
     if (id) {
-      startTransition(async () => {
-        await deleteTodo(id);
-      });
+      await setCompleteStatus(id, complete);
     }
     router.refresh();
   };
@@ -40,32 +38,48 @@ export const TodosList = ({ todos }: { todos: Todo }) => {
     <Table className="w-full p-4 mt-4">
       <TableHeader className="w-full p-4 mt-4">
         <TableRow className="w-full">
-          <TableHead className="w-1/4">ID</TableHead>
-          <TableHead className="w-1/4">Name</TableHead>
           <TableHead className="w-1/4">Completed</TableHead>
-          <TableHead className="w-1/4"></TableHead>
+          <TableHead className="w-1/4">Name</TableHead>
+          <TableHead className="w-1/4">Created</TableHead>
+          <TableHead className="w-1/4">Deadline</TableHead>
+          <TableHead className="w-1/4">Delete</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody className="w-full">
-        {todos.map((todo) => (
-          <TableRow key={todo.id}>
-            <TableCell className="w-1/4">{todo.id}</TableCell>
-            <TableCell className="w-1/2">{todo.title}</TableCell>
-            <TableCell className="w-1/4">
-              {todo.completed ? "Yes" : "No"}
-            </TableCell>
-
-            <TableCell className="w-1/2 ">
-              <Button
-                variant={"outline"}
-                onClick={() => deleteTodoById(todo.id)}
-                disabled={isPending}
+        {todos.length >= 1 &&
+          [...todos]
+            .sort((a, b) => Number(a.completed) - Number(b.completed))
+            .map((todo) => (
+              <TableRow
+                key={todo.id}
+                className={cn(
+                  todo.completed &&
+                    "bg-gray-100 dark:bg-gray-50/10  line-through "
+                )}
               >
-                <Trash2 className="text-red-500" />
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+                <TableCell className="w-1/4">
+                  <Checkbox
+                    checked={todo.completed}
+                    onClick={() => setStatus(todo.id, todo.completed)}
+                  />
+                </TableCell>
+
+                <TableCell className="w-1/4 font-semibold">
+                  {todo.title}
+                </TableCell>
+                <TableCell className="w-1/4 font-semibold">
+                  {todo.createdAt.toLocaleDateString()}
+                </TableCell>
+                <TableCell className="w-1/4">
+                  <p className="font-semibold">
+                    {new Date(todo.toBeDone).toLocaleDateString()}{" "}
+                  </p>
+                </TableCell>
+                <TableCell className="w-1/2 ">
+                  <DeleteTodo todoId={todo.id} />
+                </TableCell>
+              </TableRow>
+            ))}
       </TableBody>
     </Table>
   );

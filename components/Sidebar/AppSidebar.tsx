@@ -1,16 +1,25 @@
-import { Calendar, Home, BookOpenCheck, ListTodo } from "lucide-react";
+import {
+  Calendar,
+  Home,
+  ListChecks,
+  CheckSquare,
+  CheckCheck,
+} from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "./ModeToggle";
+import { UserSection } from "../Pages/Home/UserSection";
+import Link from "next/link";
 
 const items = [
   {
@@ -21,12 +30,12 @@ const items = [
   {
     title: "Habits",
     url: "/habits",
-    icon: BookOpenCheck,
+    icon: CheckCheck,
   },
   {
     title: "To do",
     url: "/todo",
-    icon: ListTodo,
+    icon: CheckSquare,
   },
   {
     title: "Calendar",
@@ -38,28 +47,38 @@ const items = [
 export const AppSidebar = () => {
   return (
     <Sidebar>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem className="flex items-center gap-2">
+            <ListChecks />
+            <p className="font-semibold">Habit tracker</p>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-lg">
-            <p>Habit tracker</p>
-          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                      <span className="text-sm">{item.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-              <ModeToggle />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <UserSection />
+        <div className="flex  items-center justify-between">
+          <p className="text-sm">Dark mode</p> <ModeToggle />
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 };

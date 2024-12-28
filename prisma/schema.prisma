@@ -21,6 +21,7 @@ model User {
   firstName   String
   lastName    String
   todos       Todo[]   @relation("UserTodos")
+  habits      Habit[]  @relation("UserHabits")
   profileImage String?
 }
 
@@ -28,7 +29,18 @@ model Todo {
   id          Int      @id @default(autoincrement())
   title       String
   createdAt   DateTime @default(now())
+  toBeDone    DateTime
   userId      String
   completed   Boolean  @default(false)
   user        User     @relation("UserTodos", fields: [userId], references: [id])
+}
+
+model Habit {
+  id Int @id @default(autoincrement())
+  userId      String
+  title String
+  createdAt   DateTime @default(now())
+  completed Boolean @default(false)
+  streak Int 
+  user User @relation("UserHabits", fields: [userId], references: [id])
 }

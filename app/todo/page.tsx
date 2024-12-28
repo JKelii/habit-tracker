@@ -22,7 +22,7 @@ const page = async () => {
       <Card className="w-full flex flex-col justify-center items-center">
         <CardHeader>
           <CardTitle className="flex justify-center items-center gap-2 text-xl">
-            Todos <ListTodo />
+            ToDos <ListTodo />
           </CardTitle>
           <CardDescription>Add things to your list</CardDescription>
         </CardHeader>
@@ -30,7 +30,11 @@ const page = async () => {
           {user ? (
             <>
               <AddToDo />
-              <TodosList todos={todos} />
+              {todos.length >= 1 ? (
+                <TodosList todos={todos} />
+              ) : (
+                <p className="font-bold text-2xl">You have nothing to do?</p>
+              )}
             </>
           ) : (
             <p>You have to be logged in</p>

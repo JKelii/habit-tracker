@@ -3,25 +3,33 @@ import prisma from "@/app/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const getTodos = async () => {
-  const user = await currentUser();
-  const userId = user?.id;
+  try {
+    const user = await currentUser();
+    const userId = user?.id;
 
-  if (!userId) {
-    throw new Error("Can't get user");
+    if (!user || !userId) {
+      throw new Error("Can't get user");
+    }
+
+    const todos = await prisma.todo.findMany({
+      where: {
+        userId: user.id,
+      },
+    });
+    return todos;
+  } catch (error) {
+    throw error;
   }
-
-  const todos = await prisma.todo.findMany({
-    where: {
-      userId: userId,
-    },
-  });
-
-  return todos;
 };
 
-export const createTodo = async (title: string, userId: string) => {
+export const createTodo = async (
+  title: string,
+  userId: string,
+  deadline: Date
+) => {
   const create = await prisma.todo.create({
     data: {
+      toBeDone: deadline,
       title,
       user: {
         connect: { id: userId },
@@ -39,4 +47,13 @@ export const deleteTodo = async (id: number) => {
     },
   });
   return deleteTodoById;
+};
+
+export const setCompleteStatus = async (id: number, complete: boolean) => {
+  const updatedTodo = await prisma.todo.update({
+    where: { id },
+    data: { completed: !complete },
+  });
+
+  return updatedTodo;
 };

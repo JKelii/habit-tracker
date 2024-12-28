@@ -1,3 +1,6 @@
+import { getHabits } from "@/actions/habits";
+import { AddHabit } from "@/components/Pages/Habits/AddHabit";
+import { HabitsList } from "@/components/Pages/Habits/HabitsList";
 import {
   Card,
   CardContent,
@@ -5,19 +8,38 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { currentUser } from "@clerk/nextjs/server";
+import { ListChecks } from "lucide-react";
 import React from "react";
 
-const HabitsPage = () => {
+const HabitsPage = async () => {
+  const user = await currentUser();
+  const habits = await getHabits();
   return (
     <main className="flex flex-col justify-center items-center p-4">
       <Card className="w-full flex flex-col justify-center items-center">
-        <CardHeader className="border border-gray-100 p-4 rounded-lg my-4 rounded-gl">
-          <CardTitle>Habits</CardTitle>
-          <CardDescription>Manage your habits</CardDescription>
-          <CardContent className="w-full border border-gray-100">
-            Hello
-          </CardContent>
+        <CardHeader>
+          <CardTitle className="flex justify-center items-center gap-2 text-xl">
+            Habits <ListChecks />
+          </CardTitle>
+          <CardDescription>Add habits to your daily routine</CardDescription>
         </CardHeader>
+        <CardContent className="self-start flex flex-col w-full justify-center items-center">
+          <AddHabit />
+          <HabitsList habits={habits} />
+          {user ? (
+            <>
+              {/*Add habit */}
+              {habits.length >= 1 ? (
+                <HabitsList habits={habits} />
+              ) : (
+                <p className="font-bold text-2xl">You have nothing to do?</p>
+              )}
+            </>
+          ) : (
+            <p>You have to be logged in</p>
+          )}
+        </CardContent>
       </Card>
     </main>
   );
