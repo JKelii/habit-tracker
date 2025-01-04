@@ -12,7 +12,7 @@ import { currentUser } from "@clerk/nextjs/server";
 
 import { ListTodo } from "lucide-react";
 import React from "react";
-
+//TODO: CREATE CHANGING DIALOG OF TODO
 const page = async () => {
   const user = await currentUser();
   const todos = await getTodos();

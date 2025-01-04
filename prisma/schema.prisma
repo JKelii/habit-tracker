@@ -41,6 +41,7 @@ model Habit {
   title String
   createdAt   DateTime @default(now())
   completed Boolean @default(false)
+  lastUpdated DateTime @default(now())
   streak Int 
   user User @relation("UserHabits", fields: [userId], references: [id])
 }

@@ -9,7 +9,7 @@ export const UserSection = () => {
   const { user, isSignedIn } = useUser();
 
   return (
-    <div className="space-x-4 my-2 justify-start items-center h-full py-2 flex hover:bg-gray-100 w-full rounded-lg mr-3">
+    <div className="space-x-4 my-2 justify-start items-center h-full flex w-full">
       {isSignedIn ? (
         <>
           <SignedIn>
@@ -22,7 +22,7 @@ export const UserSection = () => {
       ) : (
         <>
           <SignedOut>
-            <Button asChild size={"lg"}>
+            <Button asChild size={"sm"}>
               <Link href={"/api/sign-up"}>Sign in</Link>
             </Button>
           </SignedOut>

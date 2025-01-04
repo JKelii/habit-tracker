@@ -33,7 +33,7 @@ export const PageCard = ({
         <CardHeader>
           <CardTitle className="flex items-center justify-center">
             {icon}
-            {title}s
+            {title}
           </CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardHeader>
@@ -43,7 +43,7 @@ export const PageCard = ({
         <CardFooter>
           <Link href={link}>
             <Button className="w-full group-hover:bg-primary/90">
-              Create new {title}
+              Go to {title} section
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>

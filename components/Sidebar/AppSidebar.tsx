@@ -4,6 +4,7 @@ import {
   ListChecks,
   CheckSquare,
   CheckCheck,
+  Timer,
 } from "lucide-react";
 
 import {
@@ -18,7 +19,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "./ModeToggle";
-import { UserSection } from "../Pages/Home/UserSection";
+import { UserSection } from "./UserSection";
 import Link from "next/link";
 
 const items = [
@@ -36,6 +37,11 @@ const items = [
     title: "To do",
     url: "/todo",
     icon: CheckSquare,
+  },
+  {
+    title: "Pomodoro",
+    url: "/pomodoro",
+    icon: Timer,
   },
   {
     title: "Calendar",

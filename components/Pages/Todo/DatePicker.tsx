@@ -11,19 +11,28 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { UseFormRegister } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { FormData } from "./AddToDo";
 
 export const DatePicker = ({
   setDate,
   date,
   register,
+  setValue,
 }: {
   setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
   date: Date | undefined;
   register: UseFormRegister<FormData>;
+  setValue: UseFormSetValue<FormData>;
 }) => {
   const today = new Date();
+
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    if (selectedDate) {
+      setValue("deadline", selectedDate, { shouldValidate: true });
+    }
+  };
 
   return (
     <Popover modal>
@@ -45,7 +54,7 @@ export const DatePicker = ({
           {...register("deadline")}
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={handleDateSelect}
           initialFocus
           disabled={(currentDate) => {
             today.setHours(0, 0, 0, 0);

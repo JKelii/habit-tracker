@@ -1,4 +1,5 @@
 "use server";
+import { format, isSameDay, subDays } from "date-fns";
 
 import prisma from "@/app/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
@@ -37,5 +38,70 @@ export const addHabit = async (title: string, userId: string) => {
     return newHabit;
   } catch (error) {
     throw error;
+  }
+};
+
+export const deleteHabit = async (id: number) => {
+  const deleteHabit = await prisma.habit.delete({
+    where: {
+      id: id,
+    },
+  });
+  return deleteHabit;
+};
+
+export const resetHabit = async (habitIds: number[]) => {
+  const today = format(new Date(), "yyyy-MM-dd");
+
+  const yesterday = subDays(today, 1);
+
+  const isYesterday = (date: string) => isSameDay(date, yesterday);
+  if (isYesterday(today)) {
+    const reset = await prisma.habit.updateMany({
+      where: {
+        id: {
+          in: habitIds,
+        },
+        completed: true,
+      },
+      data: {
+        completed: false,
+      },
+    });
+    return reset;
+  } else {
+    return;
+  }
+};
+
+export const completeHabit = async (habitId: number, streak: number) => {
+  const today = format(new Date(), "dd-MM-yyyy");
+
+  const yesterday = subDays(today, 1);
+
+  const isYesterday = (date: string) => isSameDay(date, yesterday);
+
+  if (isYesterday(today)) {
+    const complete = await prisma.habit.update({
+      where: {
+        id: habitId,
+      },
+      data: {
+        completed: true,
+        streak: streak + 1,
+      },
+    });
+    return complete;
+  } else {
+    const reset = await prisma.habit.update({
+      where: {
+        id: habitId,
+      },
+      data: {
+        completed: true,
+        streak: (streak = 1),
+      },
+    });
+    return reset;
   }
 };

@@ -38,6 +38,7 @@ export const AddToDo = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormData>({
     resolver: yupResolver(todoSchema),
   });
@@ -50,9 +51,9 @@ export const AddToDo = () => {
     const userId = user.user?.id;
     if (userId && date) {
       startTransition(async () => {
-        await createTodo(data.title, userId, date);
+        await createTodo(data.title, userId, data.deadline);
       });
-
+      console.log(data);
       setIsOpen(false);
     }
     router.refresh();
@@ -82,15 +83,25 @@ export const AddToDo = () => {
               </Label>
               <Input id="todo" {...register("title")} />
               {errors.title && (
-                <p className="text-sm text-red-500 py-1 font-semibold self-start">
-                  This field is required
+                <p className="text-sm text-red-500  font-semibold self-start">
+                  Title is required
                 </p>
               )}
               <div className="self-start w-full flex flex-col">
                 <Label htmlFor="date" className="self-start my-1">
                   Deadline
                 </Label>
-                <DatePicker setDate={setDate} date={date} register={register} />
+                <DatePicker
+                  setDate={setDate}
+                  date={date}
+                  register={register}
+                  setValue={setValue}
+                />
+                {errors.deadline && (
+                  <p className="text-sm text-red-500 font-semibold self-start">
+                    Date is required
+                  </p>
+                )}
               </div>
               <Button
                 className="mt-4 self-end"

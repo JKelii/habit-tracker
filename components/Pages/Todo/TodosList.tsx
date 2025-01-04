@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 
 import { DeleteTodo } from "./DeleteTodo";
 import { useRouter } from "next/navigation";
+import { ModifyTodo } from "./ModifyTodo";
 
 type Todo = {
   id: number;
@@ -23,7 +24,7 @@ type Todo = {
   completed: boolean;
   toBeDone: Date;
 }[];
-
+//TODO: Create a modify toodo
 export const TodosList = ({ todos }: { todos: Todo }) => {
   const router = useRouter();
 
@@ -42,7 +43,8 @@ export const TodosList = ({ todos }: { todos: Todo }) => {
           <TableHead className="w-1/4">Name</TableHead>
           <TableHead className="w-1/4">Created</TableHead>
           <TableHead className="w-1/4">Deadline</TableHead>
-          <TableHead className="w-1/4">Delete</TableHead>
+          <TableHead className="w-1/4">Modify</TableHead>
+          <TableHead className="w-1/2">Delete</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody className="w-full">
@@ -54,13 +56,13 @@ export const TodosList = ({ todos }: { todos: Todo }) => {
                 key={todo.id}
                 className={cn(
                   todo.completed &&
-                    "bg-gray-100 dark:bg-gray-50/10  line-through "
+                    "bg-gray-100 dark:bg-gray-50/10 line-through "
                 )}
               >
                 <TableCell className="w-1/4">
                   <Checkbox
                     checked={todo.completed}
-                    onClick={() => setStatus(todo.id, todo.completed)}
+                    onCheckedChange={() => setStatus(todo.id, todo.completed)}
                   />
                 </TableCell>
 
@@ -74,6 +76,9 @@ export const TodosList = ({ todos }: { todos: Todo }) => {
                   <p className="font-semibold">
                     {new Date(todo.toBeDone).toLocaleDateString()}{" "}
                   </p>
+                </TableCell>
+                <TableCell className="w-1/2 ">
+                  <ModifyTodo title={todo.title} />
                 </TableCell>
                 <TableCell className="w-1/2 ">
                   <DeleteTodo todoId={todo.id} />

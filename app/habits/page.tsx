@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/card";
 import { currentUser } from "@clerk/nextjs/server";
 import { ListChecks } from "lucide-react";
-import React from "react";
 
 const HabitsPage = async () => {
   const user = await currentUser();
   const habits = await getHabits();
+  //TODO: ADD IMAGES/ICONS
   return (
     <main className="flex flex-col justify-center items-center p-4">
       <Card className="w-full flex flex-col justify-center items-center">
@@ -26,10 +26,8 @@ const HabitsPage = async () => {
         </CardHeader>
         <CardContent className="self-start flex flex-col w-full justify-center items-center">
           <AddHabit />
-          <HabitsList habits={habits} />
           {user ? (
             <>
-              {/*Add habit */}
               {habits.length >= 1 ? (
                 <HabitsList habits={habits} />
               ) : (

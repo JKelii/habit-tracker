@@ -1,7 +1,4 @@
-import { PageCard } from "@/components/Pages/Home/PageCard";
-import { CheckCheck, CheckSquare } from "lucide-react";
-
-//TODO: Skeleton for user
+import { PageCardList } from "@/components/Pages/Home/PageCardList";
 
 export default function Home() {
   return (
@@ -15,29 +12,14 @@ export default function Home() {
               </h1>
               <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
                 Habit tracker helps you create, track, and maintain positive
-                habits. Start your journey to a better you today.
+                habits. Start your journey to a better You today.
               </p>
             </div>
           </div>
         </div>
       </section>
-      <section className="flex justify-center items-center w-full gap-10">
-        <PageCard
-          icon={<CheckSquare className="mr-2 h-5 w-5 text-primary" />}
-          title="ToDo"
-          description="Start organizing your tasks"
-          content="Ready to tackle your tasks? Click here to add a new item to your
-              todo list and stay on top of your goals."
-          link="/todo"
-        />
-        <PageCard
-          icon={<CheckCheck className="mr-2 h-5 w-5 text-primary" />}
-          title="Habit"
-          description="Build lasting positive routines"
-          content="  Want to develop a new habit? Click here to start your journey
-              towards growth and self-improvement."
-          link="/habits"
-        />
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 place-items-center">
+        <PageCardList />
       </section>
     </article>
   );
