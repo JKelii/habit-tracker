@@ -8,12 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import React, { useEffect } from "react";
+
 import { DeleteHabit } from "./DeleteHabit";
 import { Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { completeHabit, resetHabit } from "@/actions/habits";
+import { completeHabit } from "@/actions/habits";
 
 type HabitsType = {
   id: number;
@@ -29,11 +29,11 @@ export const HabitsList = ({ habits }: { habits: HabitsType }) => {
     await completeHabit(habitId, streak);
   };
 
-  const habitId = habits.map((habit) => habit.id);
+  // const habitId = habits.map((habit) => habit.id);
 
-  useEffect(() => {
-    resetHabit(habitId);
-  }, []);
+  // useEffect(() => {
+  //   resetHabit(habitId);
+  // }, []);
 
   return (
     <section className="w-full mt-2">

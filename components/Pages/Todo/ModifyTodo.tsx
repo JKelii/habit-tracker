@@ -1,3 +1,5 @@
+import { updateTodoTitle } from "@/actions/todos";
+import { modifyTodoSchema } from "@/app/schema/modifyTodoTitle";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,15 +12,37 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { SquarePen } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 
 type ModifyTodoType = {
   title: string;
+  id: number;
 };
-//TODO: ADD FORM AND DEADLINE CHANGE
-export const ModifyTodo = ({ title }: ModifyTodoType) => {
+
+type formData = {
+  title: string;
+};
+
+export const ModifyTodo = ({ title, id }: ModifyTodoType) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<formData>({ resolver: yupResolver(modifyTodoSchema) });
+
+  const handleFormSubmit = async (data: formData) => {
+    await updateTodoTitle(id, data.title);
+    setIsOpen((prev) => !prev);
+    router.refresh();
+  };
+
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -34,19 +58,31 @@ export const ModifyTodo = ({ title }: ModifyTodoType) => {
               Change fields and then click save
             </DialogDescription>
           </DialogHeader>
-          <Label htmlFor={title}>Title</Label>
-          <Input defaultValue={title} id={title} />
-          <DialogFooter className="w-full">
-            <div className="flex justify-between w-full items-center">
-              <Button
-                className="self-start"
-                variant={"outline"}
-                onClick={() => setIsOpen(false)}
-              >
-                Close
-              </Button>
-            </div>
-          </DialogFooter>
+          <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <Label htmlFor={title}>Title</Label>
+            <Input defaultValue={title} id={title} {...register("title")} />
+            {errors.title && (
+              <p className="text-sm text-red-500  font-semibold self-start">
+                Title is required
+              </p>
+            )}
+
+            <DialogFooter className="w-full mt-4">
+              <div className="flex justify-between w-full items-center">
+                <Button
+                  type="button"
+                  className="self-start"
+                  variant={"default"}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Close
+                </Button>
+                <Button type="submit" className="self-end" variant={"outline"}>
+                  Modify
+                </Button>
+              </div>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </>

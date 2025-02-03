@@ -24,7 +24,7 @@ type Todo = {
   completed: boolean;
   toBeDone: Date;
 }[];
-//TODO: Create a modify toodo
+
 export const TodosList = ({ todos }: { todos: Todo }) => {
   const router = useRouter();
 
@@ -65,7 +65,6 @@ export const TodosList = ({ todos }: { todos: Todo }) => {
                     onCheckedChange={() => setStatus(todo.id, todo.completed)}
                   />
                 </TableCell>
-
                 <TableCell className="w-1/4 font-semibold">
                   {todo.title}
                 </TableCell>
@@ -78,7 +77,7 @@ export const TodosList = ({ todos }: { todos: Todo }) => {
                   </p>
                 </TableCell>
                 <TableCell className="w-1/2 ">
-                  <ModifyTodo title={todo.title} />
+                  <ModifyTodo title={todo.title} id={todo.id} />
                 </TableCell>
                 <TableCell className="w-1/2 ">
                   <DeleteTodo todoId={todo.id} />

@@ -14,15 +14,14 @@ export async function GET() {
     throw new Error("Something went wrong");
   }
 
-  let dbUser = await prisma.user.findUnique({
+  const dbUser = await prisma.user.findUnique({
     where: {
       id: user.id,
     },
   });
-  console.log(dbUser);
 
   if (!dbUser) {
-    dbUser = await prisma.user.create({
+    const createdUser = await prisma.user.create({
       data: {
         id: user.id,
         email: email ?? "",
@@ -31,7 +30,7 @@ export async function GET() {
         profileImage: profilePicture,
       },
     });
-    console.log(dbUser);
+    return createdUser;
   }
   return NextResponse.redirect("http://localhost:3000");
 }

@@ -18,7 +18,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 place-items-center">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 place-items-center mb-10">
         <PageCardList />
       </section>
     </article>

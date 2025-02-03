@@ -57,3 +57,13 @@ export const setCompleteStatus = async (id: number, complete: boolean) => {
 
   return updatedTodo;
 };
+
+export const updateTodoTitle = async (id: number, title: string) => {
+  const updateTitle = await prisma.todo.update({
+    where: {
+      id: id,
+    },
+    data: { title: title },
+  });
+  return updateTitle;
+};

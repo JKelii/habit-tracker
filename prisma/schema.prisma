@@ -22,6 +22,7 @@ model User {
   lastName    String
   todos       Todo[]   @relation("UserTodos")
   habits      Habit[]  @relation("UserHabits")
+  pomodoro    Pomodoro[] @relation("UserPomodoro")
   profileImage String?
 }
 
@@ -44,4 +45,12 @@ model Habit {
   lastUpdated DateTime @default(now())
   streak Int 
   user User @relation("UserHabits", fields: [userId], references: [id])
+}
+
+model Pomodoro {
+  id Int @id @default(autoincrement())
+  userId String
+  createdAt  DateTime @default(now())
+  finished DateTime @default(now())
+  user User @relation("UserPomodoro", fields: [userId], references: [id])
 }

@@ -1,11 +1,4 @@
-import {
-  Calendar,
-  Home,
-  ListChecks,
-  CheckSquare,
-  CheckCheck,
-  Timer,
-} from "lucide-react";
+import { Home, ListChecks, CheckSquare, CheckCheck, Timer } from "lucide-react";
 
 import {
   Sidebar,
@@ -43,13 +36,13 @@ const items = [
     url: "/pomodoro",
     icon: Timer,
   },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
+  // {
+  //   title: "Calendar",
+  //   url: "#",
+  //   icon: Calendar,
+  // },
 ];
-
+//FIXME: SMALL SCREEN DIALOG TITLE BUG
 export const AppSidebar = () => {
   return (
     <Sidebar>

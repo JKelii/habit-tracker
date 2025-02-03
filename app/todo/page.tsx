@@ -12,7 +12,7 @@ import { currentUser } from "@clerk/nextjs/server";
 
 import { ListTodo } from "lucide-react";
 import React from "react";
-//TODO: CREATE CHANGING DIALOG OF TODO
+
 const page = async () => {
   const user = await currentUser();
   const todos = await getTodos();
@@ -30,7 +30,7 @@ const page = async () => {
           {user ? (
             <>
               <AddToDo />
-              {todos.length >= 1 ? (
+              {todos ? (
                 <TodosList todos={todos} />
               ) : (
                 <p className="font-bold text-2xl">You have nothing to do?</p>
