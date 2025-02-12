@@ -1,6 +1,6 @@
 import { getTodos } from "@/actions/todos";
 import { AddToDo } from "@/components/Pages/Todo/AddToDo";
-import { TodosList } from "@/components/Pages/Todo/TodosList";
+import { TodosList } from "@/components/Pages/Todo/TodoList/TodosList";
 import {
   Card,
   CardContent,
@@ -30,10 +30,14 @@ const page = async () => {
           {user ? (
             <>
               <AddToDo />
-              {todos ? (
+              {todos.length >= 1 ? (
                 <TodosList todos={todos} />
               ) : (
-                <p className="font-bold text-2xl">You have nothing to do?</p>
+                <>
+                  <p className="font-bold text-2xl">
+                    You finished all your tasks
+                  </p>
+                </>
               )}
             </>
           ) : (

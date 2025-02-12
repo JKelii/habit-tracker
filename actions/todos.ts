@@ -67,3 +67,47 @@ export const updateTodoTitle = async (id: number, title: string) => {
   });
   return updateTitle;
 };
+
+export const getTodoByName = async () => {
+  try {
+    const user = await currentUser();
+    const userId = user?.id;
+    if (!user || !userId) {
+      throw new Error("Can't get user");
+    }
+
+    const updateByName = await prisma.todo.findMany({
+      where: {
+        userId: userId,
+      },
+      orderBy: {
+        title: "asc",
+      },
+    });
+    return updateByName;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getTodoByDeadline = async () => {
+  try {
+    const user = await currentUser();
+    const userId = user?.id;
+    if (!user || !userId) {
+      throw new Error("Can't get user");
+    }
+
+    const updateByName = await prisma.todo.findMany({
+      where: {
+        userId: userId,
+      },
+      orderBy: {
+        toBeDone: "asc",
+      },
+    });
+    return updateByName;
+  } catch (error) {
+    console.log(error);
+  }
+};

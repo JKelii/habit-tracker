@@ -39,7 +39,7 @@ export default function RootLayout({
         >
           <Providers>
             <AppSidebar />
-            <main className="w-full min-h-screen">
+            <main className="w-full min-h-screen dark:">
               <SidebarTrigger />
               {children}
             </main>

@@ -22,3 +22,27 @@ export const getPomodoros = async () => {
   }
 };
 //TODO: CREATE POMODORO
+
+export const createPomodoro = async (createdAt: Date, finished: Date) => {
+  const user = await currentUser();
+  const userId = user?.id;
+
+  try {
+    if (!user || !user.id) {
+      throw new Error("Can't find pomodoro");
+    }
+
+    const create = await prisma.pomodoro.create({
+      data: {
+        user: {
+          connect: { id: userId },
+        },
+        createdAt,
+        finished,
+      },
+    });
+    return create;
+  } catch (error) {
+    console.log(error);
+  }
+};

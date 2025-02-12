@@ -28,8 +28,10 @@ export const DeleteTodo = ({ todoId }: { todoId: number }) => {
         await deleteTodo(id);
       });
     }
-    router.refresh();
+
     toast("ToDo deleted from your list ❌");
+    router.refresh();
+    setIsOpen(false);
   };
 
   return (

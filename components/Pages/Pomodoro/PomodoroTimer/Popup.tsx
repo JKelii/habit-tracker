@@ -14,10 +14,10 @@ export const Popup = ({
   return (
     <Dialog open={showPopup} onOpenChange={setShowPopup}>
       <DialogContent className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
-        <DialogTitle className="text-xl font-semibold">
+        <DialogTitle className="text-xl font-semibold text-black">
           Time&apos;s up!
         </DialogTitle>
-        <p className="mt-4">Your timer has finished.</p>
+        <p className="mt-4 text-black">Your timer has finished.</p>
         <div className="mt-6 flex justify-center">
           <Button onClick={() => setShowPopup((prev) => !prev)}>Close</Button>
         </div>

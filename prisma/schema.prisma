@@ -43,7 +43,8 @@ model Habit {
   createdAt   DateTime @default(now())
   completed Boolean @default(false)
   lastUpdated DateTime @default(now())
-  streak Int 
+  streak Int
+  image String? 
   user User @relation("UserHabits", fields: [userId], references: [id])
 }
 

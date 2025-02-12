@@ -1,20 +1,21 @@
 "use client";
 import { setCompleteStatus } from "@/actions/todos";
-
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-import { DeleteTodo } from "./DeleteTodo";
+import { DeleteTodo } from "../DeleteTodo";
 import { useRouter } from "next/navigation";
-import { ModifyTodo } from "./ModifyTodo";
+import { ModifyTodo } from "../ModifyTodo";
+import { TableHeads } from "./TableHeads";
+import { TablePagination } from "./TablePagination";
+import { useState } from "react";
 
 type Todo = {
   id: number;
@@ -26,30 +27,51 @@ type Todo = {
 }[];
 
 export const TodosList = ({ todos }: { todos: Todo }) => {
+  const rowPerPage = 10;
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(rowPerPage);
+  const [isFiltered, setIsFiltered] = useState(false);
   const router = useRouter();
 
   const setStatus = async (id: number, complete: boolean) => {
-    if (id) {
-      await setCompleteStatus(id, complete);
+    try {
+      if (id) {
+        await setCompleteStatus(id, complete);
+      }
+      router.refresh();
+    } catch (error) {
+      console.log(error);
     }
-    router.refresh();
+  };
+
+  const onClickChange = async () => {
+    setIsFiltered((prev) => !prev);
+    // try {
+    //   const todosByDeadline = await getTodoByDeadline();
+    //   if (!todosByDeadline) throw new Error("Can't get todos");
+    //   setFilter((prevFilter) => {
+    //     if (JSON.stringify(prevFilter) === JSON.stringify(todos)) {
+    //       return todosByDeadline;
+    //     } else {
+    //       return todos;
+    //     }
+    //   });
+    //   setIsFilter((prev) => !prev);
+    //   router.refresh();
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
     <Table className="w-full p-4 mt-4">
       <TableHeader className="w-full p-4 mt-4">
-        <TableRow className="w-full">
-          <TableHead className="w-1/4">Completed</TableHead>
-          <TableHead className="w-1/4">Name</TableHead>
-          <TableHead className="w-1/4">Created</TableHead>
-          <TableHead className="w-1/4">Deadline</TableHead>
-          <TableHead className="w-1/4">Modify</TableHead>
-          <TableHead className="w-1/2">Delete</TableHead>
-        </TableRow>
+        <TableHeads onClickChange={onClickChange} isFiltered={isFiltered} />
       </TableHeader>
       <TableBody className="w-full">
         {todos.length >= 1 &&
           [...todos]
+            .slice(startIndex, endIndex)
             .sort((a, b) => Number(a.completed) - Number(b.completed))
             .map((todo) => (
               <TableRow
@@ -85,6 +107,16 @@ export const TodosList = ({ todos }: { todos: Todo }) => {
               </TableRow>
             ))}
       </TableBody>
+      {todos.length > 10 && (
+        <TablePagination
+          startIndex={startIndex}
+          endIndex={endIndex}
+          setStartIndex={setStartIndex}
+          setEndIndex={setEndIndex}
+          rowPerPage={rowPerPage}
+          totalItems={todos.length}
+        />
+      )}
     </Table>
   );
 };

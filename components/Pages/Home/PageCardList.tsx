@@ -33,7 +33,7 @@ export const PageCardList = () => {
         title="Calendar"
         description="Set tasks for specific day"
         content="Calendar helps with tracking tasks each day"
-        link="/Calendar"
+        link="/calendar"
       />
     </>
   );

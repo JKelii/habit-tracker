@@ -1,3 +1,4 @@
+"use client";
 import { Home, ListChecks, CheckSquare, CheckCheck, Timer } from "lucide-react";
 
 import {
@@ -10,8 +11,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import { ModeToggle } from "./ModeToggle";
+
 import { UserSection } from "./UserSection";
 import Link from "next/link";
 
@@ -42,8 +44,9 @@ const items = [
   //   icon: Calendar,
   // },
 ];
-//FIXME: SMALL SCREEN DIALOG TITLE BUG
+
 export const AppSidebar = () => {
+  const { isMobile, toggleSidebar } = useSidebar();
   return (
     <Sidebar>
       <SidebarHeader>
@@ -56,27 +59,45 @@ export const AppSidebar = () => {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
+          <SidebarHeader className="text-sm text-muted-foreground uppercase font-semibold">
+            Overview
+          </SidebarHeader>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span className="text-sm">{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            {isMobile ? (
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url} onClick={toggleSidebar}>
+                        <item.icon />
+                        <span className="text-sm">{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            ) : (
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span className="text-sm">{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            )}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarHeader className="text-sm text-muted-foreground uppercase font-semibold">
+        SETTINGS
+      </SidebarHeader>
       <SidebarFooter>
         <UserSection />
-        <div className="flex  items-center justify-between">
-          <p className="text-sm">Dark mode</p> <ModeToggle />
-        </div>
       </SidebarFooter>
     </Sidebar>
   );

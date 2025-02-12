@@ -29,7 +29,7 @@ export const PageCard = ({
 }: PageCardType) => {
   return (
     <>
-      <Card className="w-96 border border-gray-100 flex flex-col justify-center items-center h-full transition-shadow hover:shadow-lg">
+      <Card className="w-96 border  dark:bg-gradient-to-r from-neutral-900 via-zinc-900 to-neutral-900 border-gray-100 flex flex-col justify-center items-center h-full transition-shadow hover:shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center justify-center">
             {icon}
@@ -41,10 +41,10 @@ export const PageCard = ({
           <p className="text-sm text-muted-foreground">{content}</p>
         </CardContent>
         <CardFooter>
-          <Link href={link}>
-            <Button className="w-full group-hover:bg-primary/90">
+          <Link href={link} className="w-full group">
+            <Button className="w-full group-hover:bg-primary/80 transition-all">
               Go to {title} section
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="ml-2 h-4 w-4  transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
         </CardFooter>

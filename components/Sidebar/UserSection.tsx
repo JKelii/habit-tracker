@@ -15,7 +15,11 @@ export const UserSection = () => {
           <SignedIn>
             <div className="flex justify-start items-center gap-2">
               <UserButton />
-              <p className="font-medium text-sm ml-1">{user?.firstName}</p>{" "}
+              <p className="font-medium text-sm ml-1">
+                {user.firstName
+                  ? user.firstName
+                  : user?.primaryEmailAddress?.emailAddress}
+              </p>{" "}
             </div>
           </SignedIn>
         </>

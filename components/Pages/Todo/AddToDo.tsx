@@ -39,6 +39,7 @@ export const AddToDo = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm<FormData>({
     resolver: yupResolver(todoSchema),
   });
@@ -55,6 +56,10 @@ export const AddToDo = () => {
       });
       console.log(data);
       setIsOpen(false);
+      reset({
+        title: "",
+      });
+      setDate(undefined);
     }
     router.refresh();
     toast("ToDo added to your list ✔");
