@@ -1,6 +1,6 @@
 import React from "react";
 import { PageCard } from "./PageCard";
-import { Calendar, CheckCheck, CheckSquare, Timer } from "lucide-react";
+import { CheckCheck, CheckSquare, ListOrdered, Timer } from "lucide-react";
 
 export const PageCardList = () => {
   return (
@@ -29,11 +29,11 @@ export const PageCardList = () => {
         link="/pomodoro"
       />
       <PageCard
-        icon={<Calendar className="mr-2 h-5 w-5 text-primary" />}
-        title="Calendar"
-        description="Set tasks for specific day"
-        content="Calendar helps with tracking tasks each day"
-        link="/calendar"
+        icon={<ListOrdered className="mr-2 h-5 w-5 text-primary" />}
+        title="EM"
+        description="1-4 tasks scale"
+        content="Eisenhower Matrix helps you prioritize tasks"
+        link="/matrix"
       />
     </>
   );

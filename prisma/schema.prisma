@@ -32,6 +32,7 @@ model Todo {
   createdAt   DateTime @default(now())
   toBeDone    DateTime
   userId      String
+  matrix      String
   completed   Boolean  @default(false)
   user        User     @relation("UserTodos", fields: [userId], references: [id])
 }

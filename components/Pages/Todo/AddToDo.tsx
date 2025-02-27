@@ -23,10 +23,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { todoSchema } from "@/app/schema/newTodoSchema";
 import { DatePicker } from "./DatePicker";
 import { toast } from "sonner";
+import { SelectPriority } from "./TodoList/SelectPriority";
 
 export type FormData = {
   title: string;
   deadline: Date;
+  matrix: string;
 };
 
 export const AddToDo = () => {
@@ -52,7 +54,7 @@ export const AddToDo = () => {
     const userId = user.user?.id;
     if (userId && date) {
       startTransition(async () => {
-        await createTodo(data.title, userId, data.deadline);
+        await createTodo(data.title, userId, data.deadline, data.matrix);
       });
       console.log(data);
       setIsOpen(false);
@@ -105,6 +107,15 @@ export const AddToDo = () => {
                 {errors.deadline && (
                   <p className="text-sm text-red-500 font-semibold self-start">
                     Date is required
+                  </p>
+                )}
+                <Label htmlFor="matrix" className="self-start my-2">
+                  Priority
+                </Label>
+                <SelectPriority setValue={setValue} />
+                {errors.matrix && (
+                  <p className="text-sm text-red-500 font-semibold self-start">
+                    1 - most important / 4 - least important
                   </p>
                 )}
               </div>

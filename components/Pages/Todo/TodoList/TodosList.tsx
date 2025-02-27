@@ -24,13 +24,13 @@ type Todo = {
   userId: string;
   completed: boolean;
   toBeDone: Date;
+  matrix: string;
 }[];
 
 export const TodosList = ({ todos }: { todos: Todo }) => {
   const rowPerPage = 10;
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(rowPerPage);
-  const [isFiltered, setIsFiltered] = useState(false);
   const router = useRouter();
 
   const setStatus = async (id: number, complete: boolean) => {
@@ -44,29 +44,10 @@ export const TodosList = ({ todos }: { todos: Todo }) => {
     }
   };
 
-  const onClickChange = async () => {
-    setIsFiltered((prev) => !prev);
-    // try {
-    //   const todosByDeadline = await getTodoByDeadline();
-    //   if (!todosByDeadline) throw new Error("Can't get todos");
-    //   setFilter((prevFilter) => {
-    //     if (JSON.stringify(prevFilter) === JSON.stringify(todos)) {
-    //       return todosByDeadline;
-    //     } else {
-    //       return todos;
-    //     }
-    //   });
-    //   setIsFilter((prev) => !prev);
-    //   router.refresh();
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  };
-
   return (
     <Table className="w-full p-4 mt-4">
       <TableHeader className="w-full p-4 mt-4">
-        <TableHeads onClickChange={onClickChange} isFiltered={isFiltered} />
+        <TableHeads />
       </TableHeader>
       <TableBody className="w-full">
         {todos.length >= 1 &&
@@ -81,27 +62,27 @@ export const TodosList = ({ todos }: { todos: Todo }) => {
                     "bg-gray-100 dark:bg-gray-50/10 line-through "
                 )}
               >
-                <TableCell className="w-1/4">
+                <TableCell className="">
                   <Checkbox
                     checked={todo.completed}
                     onCheckedChange={() => setStatus(todo.id, todo.completed)}
                   />
                 </TableCell>
-                <TableCell className="w-1/4 font-semibold">
-                  {todo.title}
-                </TableCell>
-                <TableCell className="w-1/4 font-semibold">
+                <TableCell className=" font-semibold">{todo.title}</TableCell>
+                <TableCell className=" font-semibold">
                   {todo.createdAt.toLocaleDateString()}
                 </TableCell>
-                <TableCell className="w-1/4">
+                <TableCell>
                   <p className="font-semibold">
                     {new Date(todo.toBeDone).toLocaleDateString()}{" "}
                   </p>
                 </TableCell>
-                <TableCell className="w-1/2 ">
+                <TableCell className=" font-bold pl-5">{todo.matrix}</TableCell>
+
+                <TableCell>
                   <ModifyTodo title={todo.title} id={todo.id} />
                 </TableCell>
-                <TableCell className="w-1/2 ">
+                <TableCell>
                   <DeleteTodo todoId={todo.id} />
                 </TableCell>
               </TableRow>

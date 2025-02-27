@@ -25,12 +25,14 @@ export const getTodos = async () => {
 export const createTodo = async (
   title: string,
   userId: string,
-  deadline: Date
+  deadline: Date,
+  matrix: string
 ) => {
   const create = await prisma.todo.create({
     data: {
       toBeDone: deadline,
       title,
+      matrix: matrix,
       user: {
         connect: { id: userId },
       },
@@ -107,6 +109,26 @@ export const getTodoByDeadline = async () => {
       },
     });
     return updateByName;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getTodosByMatrix = async (matrix: string) => {
+  try {
+    const user = await currentUser();
+    const userId = user?.id;
+    if (!user || !userId) {
+      throw new Error("Can't get user");
+    }
+
+    const important = await prisma.todo.findMany({
+      where: {
+        userId,
+        matrix: matrix,
+      },
+    });
+    return important;
   } catch (error) {
     console.log(error);
   }

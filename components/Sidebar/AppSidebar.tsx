@@ -1,5 +1,12 @@
 "use client";
-import { Home, ListChecks, CheckSquare, CheckCheck, Timer } from "lucide-react";
+import {
+  Home,
+  ListChecks,
+  CheckSquare,
+  CheckCheck,
+  Timer,
+  ListOrdered,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -38,11 +45,11 @@ const items = [
     url: "/pomodoro",
     icon: Timer,
   },
-  // {
-  //   title: "Calendar",
-  //   url: "#",
-  //   icon: Calendar,
-  // },
+  {
+    title: "Eisenhower Matrix ",
+    url: "/matrix",
+    icon: ListOrdered,
+  },
 ];
 
 export const AppSidebar = () => {

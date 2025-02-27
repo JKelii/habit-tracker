@@ -6,4 +6,5 @@ export const todoSchema = object({
     .nullable()
     .required("Deadline is required")
     .typeError("Invalid date"),
+  matrix: string().required().min(1).max(4),
 });
