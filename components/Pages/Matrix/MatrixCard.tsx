@@ -1,47 +1,32 @@
+"use client";
 import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-
-import React, { ReactNode } from "react";
-
-type GetByMatrixType =
-  | {
-      id: number;
-      title: string;
-      createdAt: Date;
-      toBeDone: Date;
-      userId: string;
-      matrix: string;
-      completed: boolean;
-    }[]
-  | undefined;
+import { DraggableTask } from "./DraggableTask";
+import { Column, TodoType } from "@/app/types/MatrixTypes";
+import { useDroppable } from "@dnd-kit/core";
 
 export const MatrixCard = ({
-  title,
-  icon,
-  data,
+  column,
+  todos,
 }: {
-  title: string;
-  icon: ReactNode;
-  data: GetByMatrixType;
+  column: Column;
+  todos: TodoType[];
 }) => {
+  const { setNodeRef } = useDroppable({ id: column.matrix });
+
   return (
-    <Card className="w-full px-4 flex items-center flex-col py-1">
-      <div className="self-start text-sm flex justify-center items-center gap-1">
-        {icon}
-        <p>{title}</p>
+    <Card className="w-full h-full  px-4 flex items-center flex-col py-1 ">
+      <div className="self-start  text-sm flex justify-center items-center gap-1">
+        {column.icon}
+        <p>{column.title}</p>
       </div>
-      <div className="flex justify-start w-full flex-col items-start mt-2">
-        {data?.map((item) => (
-          <div
-            key={item.id}
-            draggable="true"
-            className="w-full flex justify-start items-center gap-4 hover:bg-neutral-700/55 rounded-md px-2 py-1"
-          >
-            <Checkbox />
-            <p className="text-sm font-semibold">{item.title}</p>
-          </div>
+      <div
+        ref={setNodeRef}
+        className="flex justify-start w-full h-full  flex-col items-center gap-2 mt-2 "
+      >
+        {todos?.map((item) => (
+          <DraggableTask key={item.id} id={item.id} title={item.title} />
         ))}
-      </div>{" "}
+      </div>
     </Card>
   );
 };

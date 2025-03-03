@@ -114,7 +114,7 @@ export const getTodoByDeadline = async () => {
   }
 };
 
-export const getTodosByMatrix = async (matrix: string) => {
+export const updateDraggedMatrix = async (matrix: string, id: number) => {
   try {
     const user = await currentUser();
     const userId = user?.id;
@@ -122,13 +122,15 @@ export const getTodosByMatrix = async (matrix: string) => {
       throw new Error("Can't get user");
     }
 
-    const important = await prisma.todo.findMany({
+    const updated = await prisma.todo.update({
       where: {
-        userId,
+        id,
+      },
+      data: {
         matrix: matrix,
       },
     });
-    return important;
+    return updated;
   } catch (error) {
     console.log(error);
   }
