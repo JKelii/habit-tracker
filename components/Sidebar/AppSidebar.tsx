@@ -1,12 +1,4 @@
 "use client";
-import {
-  Home,
-  ListChecks,
-  CheckSquare,
-  CheckCheck,
-  Timer,
-  ListOrdered,
-} from "lucide-react";
 
 import {
   Sidebar,
@@ -14,6 +6,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -23,34 +16,8 @@ import {
 
 import { UserSection } from "./UserSection";
 import Link from "next/link";
-
-const items = [
-  {
-    title: "Home",
-    url: "/",
-    icon: Home,
-  },
-  {
-    title: "Habits",
-    url: "/habits",
-    icon: CheckCheck,
-  },
-  {
-    title: "To do",
-    url: "/todo",
-    icon: CheckSquare,
-  },
-  {
-    title: "Pomodoro",
-    url: "/pomodoro",
-    icon: Timer,
-  },
-  {
-    title: "Eisenhower Matrix ",
-    url: "/matrix",
-    icon: ListOrdered,
-  },
-];
+import { items } from "@/lib/items";
+import { ChartArea, ListChecks } from "lucide-react";
 
 export const AppSidebar = () => {
   const { isMobile, toggleSidebar } = useSidebar();
@@ -66,9 +33,9 @@ export const AppSidebar = () => {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarHeader className="text-sm text-muted-foreground uppercase font-semibold">
+          <SidebarGroupLabel className="text-sm text-muted-foreground uppercase font-semibold">
             Overview
-          </SidebarHeader>
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             {isMobile ? (
               <SidebarMenu>
@@ -99,11 +66,34 @@ export const AppSidebar = () => {
             )}
           </SidebarGroupContent>
         </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarGroupLabel className="text-sm text-muted-foreground uppercase font-semibold">
+              PREMIUM
+            </SidebarGroupLabel>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <Link
+                    href={"/premium"}
+                    className="flex justify-center items-center text-sm gap-1"
+                  >
+                    {" "}
+                    <ChartArea />
+                    Premium
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
-      <SidebarHeader className="text-sm text-muted-foreground uppercase font-semibold">
-        SETTINGS
-      </SidebarHeader>
+
       <SidebarFooter>
+        <SidebarGroupLabel className="text-sm text-muted-foreground uppercase font-semibold">
+          SETTINGS
+        </SidebarGroupLabel>
+
         <UserSection />
       </SidebarFooter>
     </Sidebar>
