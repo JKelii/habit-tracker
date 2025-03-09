@@ -16,14 +16,11 @@ datasource db {
 
 
 model User {
-  id          String   @id @default(uuid())
+  userId          String   @id @default(uuid())
   email       String   @unique
-  firstName   String
-  lastName    String
   todos       Todo[]   @relation("UserTodos")
   habits      Habit[]  @relation("UserHabits")
   pomodoro    Pomodoro[] @relation("UserPomodoro")
-  profileImage String?
 }
 
 model Todo {
@@ -34,7 +31,7 @@ model Todo {
   userId      String
   matrix      String
   completed   Boolean  @default(false)
-  user        User     @relation("UserTodos", fields: [userId], references: [id])
+  user        User     @relation("UserTodos", fields: [userId], references: [userId])
 }
 
 model Habit {
@@ -46,7 +43,7 @@ model Habit {
   lastUpdated DateTime @default(now())
   streak Int
   image String? 
-  user User @relation("UserHabits", fields: [userId], references: [id])
+  user User @relation("UserHabits", fields: [userId], references: [userId])
 }
 
 model Pomodoro {
@@ -54,5 +51,5 @@ model Pomodoro {
   userId String
   createdAt  DateTime @default(now())
   finished DateTime @default(now())
-  user User @relation("UserPomodoro", fields: [userId], references: [id])
+  user User @relation("UserPomodoro", fields: [userId], references: [userId])
 }

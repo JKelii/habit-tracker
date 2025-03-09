@@ -27,7 +27,7 @@ export const UserSection = () => {
         <>
           <SignedOut>
             <Button asChild size={"sm"}>
-              <Link href={"/api/sign-up"}>Sign in</Link>
+              <Link href={"/sign-up"}>Sign up</Link>
             </Button>
           </SignedOut>
         </>

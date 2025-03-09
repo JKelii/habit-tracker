@@ -93,7 +93,6 @@ export const AppSidebar = () => {
         <SidebarGroupLabel className="text-sm text-muted-foreground uppercase font-semibold">
           SETTINGS
         </SidebarGroupLabel>
-
         <UserSection />
       </SidebarFooter>
     </Sidebar>

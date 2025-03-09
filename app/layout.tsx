@@ -6,6 +6,7 @@ import { AppSidebar } from "@/components/Sidebar/AppSidebar";
 import { Providers } from "@/components/Providers/Providers";
 import { ThemeProvider } from "@/components/Providers/ThemeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ReactQueryClientProvider } from "@/components/Providers/QueryClientProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,29 +29,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      dynamic
-      signInFallbackRedirectUrl="/api/auth/creation"
-      signUpFallbackRedirectUrl="/api/auth/creation"
-    >
+    <ClerkProvider signUpFallbackRedirectUrl={"/create-profile"}>
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Providers>
-              <AppSidebar />
-              <main className="w-full min-h-screen dark:">
-                <SidebarTrigger />
-                {children}
-              </main>
-            </Providers>
-          </ThemeProvider>
+          <ReactQueryClientProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Providers>
+                <AppSidebar />
+                <main className="w-full min-h-screen dark:">
+                  <SidebarTrigger />
+                  {children}
+                </main>
+              </Providers>
+            </ThemeProvider>
+          </ReactQueryClientProvider>
         </body>
       </html>
     </ClerkProvider>

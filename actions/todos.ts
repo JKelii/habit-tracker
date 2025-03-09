@@ -12,9 +12,7 @@ export const getTodos = async () => {
     }
 
     const todos = await prisma.todo.findMany({
-      where: {
-        userId: user.id,
-      },
+      where: { userId: userId },
     });
     return todos;
   } catch (error) {
@@ -34,7 +32,7 @@ export const createTodo = async (
       title,
       matrix: matrix,
       user: {
-        connect: { id: userId },
+        connect: { userId: userId },
       },
     },
   });

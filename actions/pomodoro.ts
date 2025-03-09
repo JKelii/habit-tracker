@@ -35,7 +35,7 @@ export const createPomodoro = async (createdAt: Date, finished: Date) => {
     const create = await prisma.pomodoro.create({
       data: {
         user: {
-          connect: { id: userId },
+          connect: { userId: userId },
         },
         createdAt,
         finished,
