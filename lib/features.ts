@@ -4,6 +4,4 @@ export const premiumFeatures = [
   "Priority support",
   "Custom branding",
   "Team collaboration",
-  "API access",
-  "Dedicated account manager",
 ];

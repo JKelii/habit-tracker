@@ -9,8 +9,9 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import { premiumFeatures } from "@/lib/features";
+import { SubscribeButtons } from "./SubscribeButtons";
 export const PremiumOffer = ({ isYearly }: { isYearly: boolean }) => {
   return (
     <motion.div
@@ -20,26 +21,25 @@ export const PremiumOffer = ({ isYearly }: { isYearly: boolean }) => {
     >
       <Card className="flex justify-center items-center w-full flex-col">
         <CardHeader className="w-full flex flex-col justify-center items-center">
-          <div className="self-end">
-            <Badge>Best Value</Badge>
-          </div>
+          {isYearly && (
+            <div className="self-end">
+              <Badge>Best Value</Badge>
+            </div>
+          )}
           <div className="self-center">
             <Sparkles className="bg-white text-black rounded-full size-8 p-1" />
           </div>
           <CardTitle className="text-3xl ">Premium</CardTitle>
           <CardDescription className="text-lg ">For ambitious</CardDescription>
           <article className="mt-2 flex justify-center items-center gap-1">
-            <h3 className="text-4xl">{isYearly ? "$180" : "$19.99"}</h3>
+            <h3 className="text-4xl">{isYearly ? "$179.99" : "$19.99"}</h3>
             <p className="text-sm font-semibold self-end text-muted-foreground">
               /{isYearly ? "year" : "month"}
             </p>
           </article>
         </CardHeader>
         <CardContent className="w-full">
-          <Button variant={"default"} className="w-full">
-            Upgrade now
-          </Button>
-          <div>
+          <div className="mb-4">
             <p className="font-medium mb-4 mt-2 text-center">
               Everything you need to succeed:
             </p>
@@ -52,6 +52,7 @@ export const PremiumOffer = ({ isYearly }: { isYearly: boolean }) => {
               ))}
             </ul>
           </div>
+          <SubscribeButtons isYearly={isYearly} />
         </CardContent>
       </Card>
     </motion.div>
