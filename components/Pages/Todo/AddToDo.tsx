@@ -71,7 +71,7 @@ export const AddToDo = () => {
     <section className="self-end mr-4">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button variant={"outline"}>Add to do</Button>
+          <Button variant={"default"}>Add to do</Button>
         </DialogTrigger>
         <DialogContent className="flex flex-col justify-center items-start w-96">
           <DialogHeader>

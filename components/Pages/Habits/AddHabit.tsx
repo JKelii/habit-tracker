@@ -72,7 +72,7 @@ export const AddHabit = () => {
               type="submit"
               disabled={isPending}
             >
-              Save to do
+              Save habit
             </Button>
           </form>
         </DialogContent>

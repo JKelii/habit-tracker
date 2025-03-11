@@ -16,6 +16,7 @@ const HabitsPage = async () => {
   const habits = await getHabits();
   //TODO: ADD IMAGES/ICONS
   //TODO: CHANGE TABLE TO SOMETHING ELSE
+
   return (
     <main className="flex flex-col justify-center items-center p-4">
       <Card className="w-full flex flex-col justify-center items-center">
@@ -29,7 +30,7 @@ const HabitsPage = async () => {
           <AddHabit />
           {user ? (
             <>
-              {habits.length >= 1 ? (
+              {habits ? (
                 <HabitsList habits={habits} />
               ) : (
                 <p className="font-bold text-2xl">You have nothing to do?</p>

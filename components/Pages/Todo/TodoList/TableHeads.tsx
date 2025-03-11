@@ -3,14 +3,13 @@ import { TableHead, TableRow } from "@/components/ui/table";
 
 export const TableHeads = () => {
   return (
-    <TableRow className="">
-      <TableHead>Completed</TableHead>
-      <TableHead>Name</TableHead>
-      <TableHead>Created</TableHead>
-      <TableHead>Deadline</TableHead>
-      <TableHead>Priority</TableHead>
-      <TableHead>Modify</TableHead>
-      <TableHead>Delete</TableHead>
+    <TableRow className="w-">
+      <TableHead className="w-1/4">Completed</TableHead>
+      <TableHead className="w-1/4">Name</TableHead>
+      <TableHead className="w-1/4">Created</TableHead>
+      <TableHead className="w-1/4">Deadline</TableHead>
+      <TableHead className="w-1/2">Modify</TableHead>
+      <TableHead className="w-1/2">Delete</TableHead>
     </TableRow>
   );
 };

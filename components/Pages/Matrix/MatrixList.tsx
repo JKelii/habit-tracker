@@ -46,11 +46,15 @@ export const MatrixList = ({ todos }: TodosType) => {
     const newMatrix = over.id as string;
 
     startTransition(() => {
-      setOptimisticTodos((prev) =>
-        prev.map((todo) =>
-          todo.id === taskId ? { ...todo, matrix: newMatrix } : todo
-        )
-      );
+      setOptimisticTodos((prev) => {
+        const updatedTodo = prev.find((todo) => todo.id === taskId);
+        if (!updatedTodo) return prev;
+
+        return [
+          ...prev.filter((todo) => todo.id !== taskId),
+          { ...updatedTodo, matrix: newMatrix },
+        ];
+      });
     });
 
     try {

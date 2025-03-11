@@ -18,7 +18,7 @@ const page = async () => {
   const todos = await getTodos();
 
   return (
-    <div className="flex flex-col justify-center items-center p-4">
+    <div className="flex flex-col justify-center items-center p-2">
       <Card className="w-full flex flex-col justify-center items-center">
         <CardHeader>
           <CardTitle className="flex justify-center items-center gap-2 text-xl">

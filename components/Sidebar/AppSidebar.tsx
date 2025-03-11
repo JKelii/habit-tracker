@@ -18,9 +18,14 @@ import { UserSection } from "./UserSection";
 import Link from "next/link";
 import { items } from "@/lib/items";
 import { ChartArea, ListChecks } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export const AppSidebar = () => {
   const { isMobile, toggleSidebar } = useSidebar();
+
+  const pathName = usePathname();
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -39,29 +44,51 @@ export const AppSidebar = () => {
           <SidebarGroupContent>
             {isMobile ? (
               <SidebarMenu>
-                {items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <Link href={item.url} onClick={toggleSidebar}>
-                        <item.icon />
-                        <span className="text-sm">{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {items.map((item) => {
+                  const isActive = pathName === item.url;
+                  return (
+                    <SidebarMenuItem
+                      key={item.title}
+                      className={cn(
+                        isActive
+                          ? "bg-neutral-300 text-black  pointer-events-none"
+                          : "hover:bg-neutral-200 hover:text-black",
+                        "rounded-lg"
+                      )}
+                    >
+                      <SidebarMenuButton asChild>
+                        <Link href={item.url} onClick={toggleSidebar}>
+                          <item.icon />
+                          <span className="text-sm">{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             ) : (
               <SidebarMenu>
-                {items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span className="text-sm">{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {items.map((item) => {
+                  const isActive = pathName === item.url;
+                  return (
+                    <SidebarMenuItem
+                      key={item.title}
+                      className={cn(
+                        isActive
+                          ? "bg-neutral-300 text-black  pointer-events-none"
+                          : "hover:bg-neutral-200 hover:text-black",
+                        "rounded-lg"
+                      )}
+                    >
+                      <SidebarMenuButton asChild>
+                        <Link href={item.url}>
+                          <item.icon />
+                          <span className="text-sm">{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             )}
           </SidebarGroupContent>
@@ -93,6 +120,7 @@ export const AppSidebar = () => {
         <SidebarGroupLabel className="text-sm text-muted-foreground uppercase font-semibold">
           SETTINGS
         </SidebarGroupLabel>
+
         <UserSection />
       </SidebarFooter>
     </Sidebar>

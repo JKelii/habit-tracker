@@ -9,7 +9,11 @@ import { Popup } from "./Popup";
 import { TimeDisplay } from "./TimeDisplay";
 import { TimerButtons } from "./TimerButtons";
 
-export const ProgressBar = () => {
+export const ProgressBar = ({
+  finishedToday,
+}: {
+  finishedToday: string[] | undefined;
+}) => {
   const totalTime = 1500;
 
   const [isRunning, setIsRunning] = useState(false);
@@ -128,7 +132,13 @@ export const ProgressBar = () => {
         handleTimer={handleTimer}
         timer={timer}
       />
-      {showPopup && <Popup setShowPopup={setShowPopup} showPopup={showPopup} />}
+      {showPopup && (
+        <Popup
+          setShowPopup={setShowPopup}
+          showPopup={showPopup}
+          finishedToday={finishedToday}
+        />
+      )}
     </>
   );
 };

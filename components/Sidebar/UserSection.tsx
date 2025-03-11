@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import React from "react";
 
 export const UserSection = () => {
   const { user, isSignedIn } = useUser();

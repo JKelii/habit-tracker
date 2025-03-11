@@ -21,7 +21,6 @@ export const getPomodoros = async () => {
     console.log(error);
   }
 };
-//TODO: CREATE POMODORO
 
 export const createPomodoro = async (createdAt: Date, finished: Date) => {
   const user = await currentUser();

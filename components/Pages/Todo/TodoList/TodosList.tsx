@@ -27,6 +27,8 @@ type Todo = {
   matrix: string;
 }[];
 
+//MODIFY LOOKS
+
 export const TodosList = ({ todos }: { todos: Todo }) => {
   const rowPerPage = 10;
   const [startIndex, setStartIndex] = useState(0);
@@ -77,7 +79,6 @@ export const TodosList = ({ todos }: { todos: Todo }) => {
                     {new Date(todo.toBeDone).toLocaleDateString()}{" "}
                   </p>
                 </TableCell>
-                <TableCell className=" font-bold pl-5">{todo.matrix}</TableCell>
 
                 <TableCell>
                   <ModifyTodo title={todo.title} id={todo.id} />

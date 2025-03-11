@@ -15,9 +15,16 @@ import React from "react";
 
 const page = async () => {
   const pomodoros = await getPomodoros();
+  const pomodorosFinishedToday = pomodoros?.map((pomodoro) =>
+    pomodoro.finished.toLocaleDateString()
+  );
+  const today = new Date().toLocaleDateString();
+  const finishedToday = pomodorosFinishedToday?.filter(
+    (pomodoro) => pomodoro === today
+  );
 
   return (
-    <main className="flex h-[95%] justify-center items-center p-4 w-full ">
+    <main className="flex h-[95%] justify-center items-center p-4 w-full">
       <Card className="w-full h-full flex flex-col justify-center items-center">
         <CardHeader>
           <CardTitle className="flex justify-center items-center gap-2 text-xl mt-8">
@@ -26,7 +33,7 @@ const page = async () => {
           <CardDescription>Track time with pomodoro technique</CardDescription>
         </CardHeader>
         <CardContent className="flex w-full items-center">
-          <PomodoroTimer />
+          <PomodoroTimer finishedToday={finishedToday} />
           <PomodoroStats pomodoros={pomodoros} />
         </CardContent>
       </Card>

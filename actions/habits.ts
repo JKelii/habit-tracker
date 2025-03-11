@@ -13,11 +13,12 @@ export const getHabits = async () => {
       throw new Error("Can't get user");
     }
 
-    await prisma.habit.findMany({
+    const habits = await prisma.habit.findMany({
       where: {
         userId: userId,
       },
     });
+    return habits;
   } catch (error) {
     throw error;
   }

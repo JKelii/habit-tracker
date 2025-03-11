@@ -1,19 +1,15 @@
 "use client";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-import { DeleteHabit } from "./DeleteHabit";
-import { Flame } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { completeHabit } from "@/actions/habits";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Check, Flame, LaptopMinimalCheck } from "lucide-react";
 
 type HabitsType = {
   id: number;
@@ -29,62 +25,65 @@ export const HabitsList = ({ habits }: { habits: HabitsType }) => {
     await completeHabit(habitId, streak);
   };
 
-  // const habitId = habits.map((habit) => habit.id);
+  const getDayLabels = () => {
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      days.push(date.getDate());
+    }
+    return days;
+  };
 
-  // useEffect(() => {
-  //   resetHabit(habitId);
-  // }, []);
+  const dayLabels = getDayLabels();
 
   return (
     <section className="w-full mt-2">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-1/4">Name</TableHead>
-            <TableHead className="w-1/4">Streak</TableHead>
-            <TableHead className="w-1/4">Completed</TableHead>
-            <TableHead className="w-1/4">Created</TableHead>
-            <TableHead className="w-1/2">Delete</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {habits.length >= 1 &&
-            habits.map((habit) => (
-              <TableRow key={habit.id}>
-                <TableCell className="w-1/4">
-                  <p className="text-sm font-semibold">{habit.title}</p>
-                </TableCell>
-                <TableCell className="w-1/4 flex items-center">
-                  <Flame className="text-orange-500" />{" "}
-                  <p className="text-sm font-semibold">{habit.streak}</p>
-                </TableCell>
-                <TableCell className="w-1/4">
-                  <Button
-                    variant={"outline"}
-                    onClick={() => dailyComplete(habit.id, habit.streak)}
-                  >
-                    <p
-                      className={cn(
-                        habit.completed ? "text-green-500" : "text-red-500",
-                        "text-sm tracking-wider"
-                      )}
+      {habits.length >= 1 &&
+        habits.map((habit) => (
+          <Card key={habit.id} className="overflow-hidden mt-4">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="rounded-md overflow-hidden bg-muted flex items-center justify-center">
+                    <LaptopMinimalCheck className="size-8 p-1" />
+                  </div>
+                  <div>
+                    <CardTitle>{habit.title}</CardTitle>
+                    <CardDescription>description</CardDescription>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 bg-red-500/25 text-orange-700 px-3 py-1 rounded-full">
+                  <Flame className="h-5 w-5 text-orange-500" />
+                  <span className="font-semibold">{habit.streak}</span>
+                  <span className="text-sm">day streak</span>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="self-star grid grid-cols-7 gap-2 mt-2">
+                {dayLabels.map((day, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                    <span className="text-xs font-semibold text-white mb-1">
+                      {day}
+                    </span>
+                    <button
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors}`}
+                      onClick={() => console.log(index)}
                     >
-                      {habit.completed ? "Done" : "False"}
-                    </p>
-                  </Button>
-                </TableCell>
-                <TableCell className="w-1/4">
-                  <p className="text-sm font-semibold">
-                    {habit.createdAt.toLocaleDateString()}
-                  </p>
-                </TableCell>
-                <TableCell className="w-1/2">
-                  <DeleteHabit habitId={habit.id} />
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
+                      <Check className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+            <CardFooter className="border-t px-6 py-3">
+              <div className="text-sm text-muted-foreground">
+                1/7 days completed
+              </div>
+            </CardFooter>
+          </Card>
+        ))}
     </section>
   );
 };

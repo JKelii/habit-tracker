@@ -4,6 +4,8 @@ import { DraggableTask } from "./DraggableTask";
 import { Column, TodoType } from "@/app/types/MatrixTypes";
 import { useDroppable } from "@dnd-kit/core";
 
+//ADD SCROLL AREA?
+
 export const MatrixCard = ({
   column,
   todos,

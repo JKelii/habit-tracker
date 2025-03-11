@@ -18,6 +18,9 @@ datasource db {
 model User {
   userId          String   @id @default(uuid())
   email       String   @unique
+  subscriptionTier     String?
+  subscriptionActive   Boolean  @default(false)
+  stripeSubscriptionId String?  @unique
   todos       Todo[]   @relation("UserTodos")
   habits      Habit[]  @relation("UserHabits")
   pomodoro    Pomodoro[] @relation("UserPomodoro")
