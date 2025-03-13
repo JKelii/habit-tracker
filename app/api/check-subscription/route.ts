@@ -1,6 +1,8 @@
 import prisma from "@/app/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
+//TODO: CREATE CONSTANT ERRORS...
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

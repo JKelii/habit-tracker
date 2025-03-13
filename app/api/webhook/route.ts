@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 400 });
   }
-
+  //TODO: USUNAC ASERCJE
   try {
     switch (event.type) {
       case "checkout.session.completed": {

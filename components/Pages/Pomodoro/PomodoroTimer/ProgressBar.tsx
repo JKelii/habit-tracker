@@ -1,7 +1,6 @@
 "use client";
 
 import { Progress } from "@/components/ui/progress";
-
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPomodoro } from "@/actions/pomodoro";
 import { useRouter } from "next/navigation";
@@ -34,6 +33,7 @@ export const ProgressBar = ({
       elapsedTimeRef.current;
     const remainingTime = Math.max(totalTime - elapsed, 0);
     setTimer(remainingTime);
+    localStorage.setItem("pomodoroTimer", remainingTime.toString());
 
     if (remainingTime > 0) {
       animationFrameRef.current = requestAnimationFrame(updateTimer);
@@ -45,8 +45,15 @@ export const ProgressBar = ({
   useEffect(() => {
     const savedStartTime = localStorage.getItem("pomodoroStartTime");
     const savedElapsedTime = localStorage.getItem("pomodoroElapsedTime");
+    const savedTimer = localStorage.getItem("pomodoroTimer");
+    const savedIsRunning = localStorage.getItem("pomodoroIsRunning");
 
-    if (savedStartTime) {
+    if (savedTimer) {
+      setTimer(parseInt(savedTimer, 10));
+      elapsedTimeRef.current = totalTime - parseInt(savedTimer, 10);
+    }
+
+    if (savedIsRunning === "true" && savedStartTime) {
       const startTime = parseInt(savedStartTime, 10);
       const elapsed = savedElapsedTime ? parseInt(savedElapsedTime, 10) : 0;
       const newElapsed = Math.floor((Date.now() - startTime) / 1000) + elapsed;
@@ -61,6 +68,7 @@ export const ProgressBar = ({
       } else {
         localStorage.removeItem("pomodoroStartTime");
         localStorage.removeItem("pomodoroElapsedTime");
+        localStorage.removeItem("pomodoroIsRunning");
       }
     }
   }, [updateTimer]);
@@ -75,6 +83,7 @@ export const ProgressBar = ({
         "pomodoroElapsedTime",
         elapsedTimeRef.current.toString()
       );
+      localStorage.setItem("pomodoroIsRunning", "false");
     } else {
       startTimeRef.current = Date.now();
       localStorage.setItem(
@@ -85,6 +94,8 @@ export const ProgressBar = ({
         "pomodoroElapsedTime",
         elapsedTimeRef.current.toString()
       );
+      localStorage.setItem("pomodoroIsRunning", "true");
+
       animationFrameRef.current = requestAnimationFrame(updateTimer);
     }
     setIsRunning((prev) => !prev);
@@ -98,6 +109,8 @@ export const ProgressBar = ({
       setTimer(totalTime);
       localStorage.removeItem("pomodoroStartTime");
       localStorage.removeItem("pomodoroElapsedTime");
+      localStorage.removeItem("pomodoroTimer");
+      localStorage.removeItem("pomodoroIsRunning");
     } catch (error) {
       console.error("Error creating pomodoro:", error);
     }
@@ -111,6 +124,8 @@ export const ProgressBar = ({
     setTimer(totalTime);
     localStorage.removeItem("pomodoroStartTime");
     localStorage.removeItem("pomodoroElapsedTime");
+    localStorage.removeItem("pomodoroTimer");
+    localStorage.removeItem("pomodoroIsRunning");
   };
 
   const minutes = Math.floor(timer / 60);

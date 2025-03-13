@@ -19,7 +19,7 @@ const HabitsPage = async () => {
 
   return (
     <main className="flex flex-col justify-center items-center p-4">
-      <Card className="w-full flex flex-col justify-center items-center">
+      <Card className="w-full flex flex-col justify-center items-center ">
         <CardHeader>
           <CardTitle className="flex justify-center items-center gap-2 text-xl">
             Habits <ListChecks />

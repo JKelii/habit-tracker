@@ -17,9 +17,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { HabitIcons } from "./HabitIcons";
 
 type FormData = {
   title: string;
+  description: string;
+  icon?: string;
 };
 
 export const AddHabit = () => {
@@ -28,6 +31,7 @@ export const AddHabit = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(habitSchema),
@@ -39,7 +43,7 @@ export const AddHabit = () => {
     const userId = user.user?.id;
     startTransition(async () => {
       if (userId) {
-        await addHabit(data.title, userId);
+        await addHabit(data.title, userId, data.icon, data.description);
       }
       setIsOpen(false);
       router.refresh();
@@ -59,16 +63,34 @@ export const AddHabit = () => {
               Create a new habit. Click save when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
-          <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="w-full flex flex-col gap-2"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Label htmlFor="title">Title</Label>
-            <Input id="title" {...register("title")} />
+            <Input id="title" {...register("title")} placeholder="Reading" />
             {errors.title && (
               <p className="text-sm text-red-500 py-1 font-semibold self-start">
                 This field is required
               </p>
             )}
+            <Label htmlFor="description">Description</Label>
+            <Input
+              id="description"
+              {...register("description")}
+              placeholder="30 minutes of cardio"
+            />
+            {errors.description && (
+              <p className="text-sm text-red-500 py-1 font-semibold self-start">
+                Description should be shorter
+              </p>
+            )}
+
+            <Input {...register("icon")} className="hidden" />
+            <HabitIcons setValue={setValue} />
+
             <Button
-              className="mt-4 self-end"
+              className="mt-4 self-end "
               type="submit"
               disabled={isPending}
             >

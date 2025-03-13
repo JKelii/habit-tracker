@@ -24,12 +24,19 @@ export const getHabits = async () => {
   }
 };
 
-export const addHabit = async (title: string, userId: string) => {
+export const addHabit = async (
+  title: string,
+  userId: string,
+  icon: string | undefined,
+  description: string
+) => {
   try {
     const newHabit = await prisma.habit.create({
       data: {
         title: title,
         streak: 1,
+        description: description,
+        image: icon,
         user: {
           connect: { userId: userId },
         },

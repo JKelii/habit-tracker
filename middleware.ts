@@ -9,14 +9,14 @@ const isPublicRoute = createRouteMatcher([
   "/api/check-subscription(.*)",
 ]);
 
-const isSignedUpUserRouter = createRouteMatcher([
-  "/todo",
-  "/habits",
-  "/pomodoro",
-  "/matrix",
-  "api/webhook(.*)",
-  "/api/check-subscription(.*)",
-]);
+// const isSignedUpUserRouter = createRouteMatcher([
+//   "/todo",
+//   "/habits",
+//   "/pomodoro",
+//   "/matrix",
+//   "api/webhook(.*)",
+//   "/api/check-subscription(.*)",
+// ]);
 
 export default clerkMiddleware(async (auth, req) => {
   const userAuth = await auth();
@@ -31,19 +31,19 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(new URL("/sign-up", origin));
   }
 
-  if (isSignedUpUserRouter(req) && userId && !pathname.startsWith("/api/")) {
-    try {
-      const response = await fetch(
-        `${origin}/api/check-subscription?userId=${userId}`
-      );
-      const data = await response.json();
-      if (!data.subscriptionActive) {
-        return NextResponse.redirect(new URL("/premium", origin));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // if (isSignedUpUserRouter(req) && userId && !pathname.startsWith("/api/")) {
+  //   try {
+  //     const response = await fetch(
+  //       `${origin}/api/check-subscription?userId=${userId}`
+  //     );
+  //     const data = await response.json();
+  //     if (!data.subscriptionActive) {
+  //       return NextResponse.redirect(new URL("/premium", origin));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 });
 
 export const config = {

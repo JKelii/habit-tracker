@@ -9,7 +9,7 @@ import {
   TodosType,
 } from "../../../app/types/MatrixTypes";
 import { useRouter } from "next/navigation";
-import { startTransition, useOptimistic } from "react";
+import { startTransition, useMemo, useOptimistic } from "react";
 
 const COLUMNS: ColumnType[] = [
   {
@@ -65,17 +65,20 @@ export const MatrixList = ({ todos }: TodosType) => {
     }
   };
 
+  const filteredTodos = useMemo(() => {
+    return COLUMNS.map((column) => ({
+      column,
+      todos: optimisticTodos.filter((todo) => todo.matrix === column.matrix),
+    }));
+  }, [optimisticTodos]);
+
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      {COLUMNS.map((column) => (
-        <MatrixCard
-          key={column.title}
-          todos={optimisticTodos.filter(
-            (todo) => todo.matrix === column.matrix
-          )}
-          column={column}
-        />
-      ))}
+      <DndContext onDragEnd={handleDragEnd}>
+        {filteredTodos.map(({ column, todos }) => (
+          <MatrixCard key={column.title} todos={todos} column={column} />
+        ))}
+      </DndContext>
     </DndContext>
   );
 };
