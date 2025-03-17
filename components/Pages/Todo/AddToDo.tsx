@@ -24,11 +24,13 @@ import { todoSchema } from "@/app/schema/newTodoSchema";
 import { DatePicker } from "./DatePicker";
 import { toast } from "sonner";
 import { SelectPriority } from "./TodoList/SelectPriority";
+import { SelectCategory } from "./TodoList/SelectCategory";
 
 export type FormData = {
   title: string;
   deadline: Date;
   matrix: string;
+  category: string;
 };
 
 export const AddToDo = () => {
@@ -54,7 +56,13 @@ export const AddToDo = () => {
     const userId = user.user?.id;
     if (userId && date) {
       startTransition(async () => {
-        await createTodo(data.title, userId, data.deadline, data.matrix);
+        await createTodo(
+          data.title,
+          userId,
+          data.deadline,
+          data.matrix,
+          data.category
+        );
       });
       console.log(data);
       setIsOpen(false);
@@ -85,17 +93,17 @@ export const AddToDo = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="w-full justify-start flex flex-col items-center gap-2"
             >
-              <Label htmlFor="todo" className="self-start my-1">
+              <Label htmlFor="todo" className="self-start my-1 text-xs">
                 Title
               </Label>
               <Input id="todo" {...register("title")} />
               {errors.title && (
-                <p className="text-sm text-red-500  font-semibold self-start">
+                <p className="ml-1 text-sm text-red-500  font-semibold self-start">
                   Title is required
                 </p>
               )}
               <div className="self-start w-full flex flex-col">
-                <Label htmlFor="date" className="self-start my-1">
+                <Label htmlFor="date" className="self-start my-1 text-xs">
                   Deadline
                 </Label>
                 <DatePicker
@@ -105,19 +113,29 @@ export const AddToDo = () => {
                   setValue={setValue}
                 />
                 {errors.deadline && (
-                  <p className="text-sm text-red-500 font-semibold self-start">
+                  <p className="ml-1 text-sm text-red-500 font-semibold self-start">
                     Date is required
                   </p>
                 )}
-                <Label htmlFor="matrix" className="self-start my-2">
-                  Priority
-                </Label>
-                <SelectPriority setValue={setValue} />
-                {errors.matrix && (
-                  <p className="text-sm text-red-500 font-semibold self-start">
-                    1 - most important / 4 - least important
-                  </p>
-                )}
+
+                <div className="flex gap-4 mt-1">
+                  <div className="flex flex-col w-full ">
+                    <SelectPriority setValue={setValue} />
+                    {errors.matrix && (
+                      <p className="ml-1 text-sm text-red-500 font-semibold self-start">
+                        Select priority
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-col w-full">
+                    <SelectCategory setValue={setValue} />
+                    {errors.category && (
+                      <p className="ml-1 text-sm text-red-500 font-semibold self-start">
+                        Select priority
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
               <Button
                 className="mt-4 self-end"

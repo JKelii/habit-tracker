@@ -3,7 +3,7 @@
 // import { completeHabit } from "@/actions/habits";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Check } from "lucide-react";
-import { habitIcons } from "@/lib/habitIcons";
+import { habitIcons } from "@/constants/habitIcons";
 import { HabitContentHeader } from "./HabitContentHeader";
 
 type HabitsType = {

@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/app/lib/db";
+import { prisma } from "@/app/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const getPomodoros = async () => {
@@ -16,7 +16,7 @@ export const getPomodoros = async () => {
         userId: userId,
       },
     });
-    return pomodoro;
+    if (pomodoro) return pomodoro;
   } catch (error) {
     console.log(error);
   }

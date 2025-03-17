@@ -1,8 +1,8 @@
 "use server";
 import { format, isSameDay, subDays } from "date-fns";
 
-import prisma from "@/app/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
+import { prisma } from "@/app/lib/db";
 
 export const getHabits = async () => {
   try {

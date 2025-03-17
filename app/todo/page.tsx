@@ -1,5 +1,6 @@
 import { getTodos } from "@/actions/todos";
 import { AddToDo } from "@/components/Pages/Todo/AddToDo";
+import { TodoGridStats } from "@/components/Pages/Todo/TodoGridStats";
 import { TodosList } from "@/components/Pages/Todo/TodoList/TodosList";
 import {
   Card,
@@ -9,8 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { currentUser } from "@clerk/nextjs/server";
-
 import { ListTodo } from "lucide-react";
+
 import React from "react";
 
 const page = async () => {
@@ -29,6 +30,7 @@ const page = async () => {
         <CardContent className="self-start flex flex-col w-full justify-center items-center">
           {user ? (
             <>
+              <TodoGridStats todos={todos} />
               <AddToDo />
               {todos.length >= 1 ? (
                 <TodosList todos={todos} />

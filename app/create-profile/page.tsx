@@ -3,6 +3,7 @@ import { useUser } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import FadeLoader from "react-spinners/ClipLoader";
 
 type ApiResponse = {
   message: string;
@@ -43,7 +44,11 @@ const CreateProfile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, isSignedIn]);
 
-  return <div>Processing sign in...</div>;
+  return (
+    <div className="flex justify-center items-center h-[95%]">
+      <FadeLoader color="white" />
+    </div>
+  );
 };
 
 export default CreateProfile;

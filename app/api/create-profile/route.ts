@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { currentUser } from "@clerk/nextjs/server";
-import prisma from "@/app/lib/db";
+import { prisma } from "@/app/lib/db";
 
 export async function POST() {
   try {

@@ -10,7 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Check, Sparkles } from "lucide-react";
 
-import { premiumFeatures } from "@/lib/features";
+import { premiumFeatures } from "@/constants/features";
 import { SubscribeButtons } from "./SubscribeButtons";
 export const PremiumOffer = ({ isYearly }: { isYearly: boolean }) => {
   return (

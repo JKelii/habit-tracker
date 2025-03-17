@@ -1,5 +1,6 @@
 "use server";
-import prisma from "@/app/lib/db";
+
+import { prisma } from "@/app/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const getTodos = async () => {
@@ -24,13 +25,15 @@ export const createTodo = async (
   title: string,
   userId: string,
   deadline: Date,
-  matrix: string
+  matrix: string,
+  category: string
 ) => {
   const create = await prisma.todo.create({
     data: {
       toBeDone: deadline,
       title,
       matrix: matrix,
+      category: category,
       user: {
         connect: { userId: userId },
       },

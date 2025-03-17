@@ -16,7 +16,7 @@ import {
 
 import { UserSection } from "./UserSection";
 import Link from "next/link";
-import { items } from "@/lib/items";
+import { items } from "@/constants/items";
 import { ChartArea, ListChecks } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";

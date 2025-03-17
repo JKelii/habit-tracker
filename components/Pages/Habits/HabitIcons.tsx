@@ -1,5 +1,5 @@
 import { Label } from "@/components/ui/label";
-import { habitIcons } from "@/lib/habitIcons";
+import { habitIcons } from "@/constants/habitIcons";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import { UseFormSetValue } from "react-hook-form";

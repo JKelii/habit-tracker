@@ -25,7 +25,7 @@ const COLUMNS: ColumnType[] = [
   {
     matrix: "3",
     title: "Urgent, Not Important",
-    icon: <TrainFront className="size-4 text-blue-500" />,
+    icon: <TrainFront className="size-4 text-orange-500" />,
   },
   {
     matrix: "4",

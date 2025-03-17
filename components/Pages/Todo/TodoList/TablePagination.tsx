@@ -6,7 +6,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { TableCaption } from "@/components/ui/table";
+
 import React, { Dispatch, SetStateAction } from "react";
 
 type TablePaginationType = {
@@ -18,7 +18,7 @@ type TablePaginationType = {
   totalItems: number;
 };
 
-export const TablePagination = ({
+export const TodoPagination = ({
   startIndex,
   endIndex,
   setStartIndex,
@@ -47,29 +47,27 @@ export const TablePagination = ({
   };
 
   return (
-    <TableCaption>
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={handlePreviousPageClick}
-              className={isFirstPage ? "cursor-not-allowed opacity-50" : ""}
-            />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">{currentPage}</PaginationLink>
-          </PaginationItem>
+    <Pagination className="mt-4">
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            href="#"
+            onClick={handlePreviousPageClick}
+            className={isFirstPage ? "cursor-not-allowed opacity-50" : ""}
+          />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink href="#">{currentPage}</PaginationLink>
+        </PaginationItem>
 
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={handleNextPageClick}
-              className={isLastPage ? "cursor-not-allowed opacity-50" : ""}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </TableCaption>
+        <PaginationItem>
+          <PaginationNext
+            href="#"
+            onClick={handleNextPageClick}
+            className={isLastPage ? "cursor-not-allowed opacity-50" : ""}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   );
 };

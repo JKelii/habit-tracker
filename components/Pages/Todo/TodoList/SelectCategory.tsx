@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CATEGORIES } from "@/constants/categories";
 import React from "react";
 import { UseFormSetValue } from "react-hook-form";
 
@@ -17,38 +18,35 @@ type FormData = {
   category: string;
 };
 
-type SelectPriorityType = {
+type SelectCategoryType = {
   setValue: UseFormSetValue<FormData>;
 };
 
-export const SelectPriority = ({ setValue }: SelectPriorityType) => {
+export const SelectCategory = ({ setValue }: SelectCategoryType) => {
   const handleValueChange = (value: string) => {
-    setValue("matrix", value);
+    setValue("category", value);
   };
 
   return (
     <>
-      <Label htmlFor="matrix" className="self-start my-2 text-xs">
-        Priority
+      <Label htmlFor="category" className="self-start my-2 text-xs">
+        Category
       </Label>
       <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select priority" />
+          <SelectValue placeholder="Select category" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="1" className="hover:bg-black/50">
-              Very High
-            </SelectItem>
-            <SelectItem value="2" className="hover:bg-black/50">
-              High
-            </SelectItem>
-            <SelectItem value="3" className="hover:bg-black/50">
-              Medium
-            </SelectItem>
-            <SelectItem value="4" className="hover:bg-black/50">
-              Low
-            </SelectItem>
+            {CATEGORIES.map((category) => (
+              <SelectItem
+                value={category.name}
+                key={category.id}
+                className="hover:bg-black/50"
+              >
+                {category.name}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>
