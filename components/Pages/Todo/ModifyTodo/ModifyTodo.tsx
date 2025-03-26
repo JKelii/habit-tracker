@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 
 type ModifyTodoType = {
   title: string;
-  id: number;
+  id: string;
 };
 
 type formData = {

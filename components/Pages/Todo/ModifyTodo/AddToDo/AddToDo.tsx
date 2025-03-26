@@ -1,6 +1,6 @@
 "use client";
 
-import { createTodo } from "@/actions/todos";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,17 +14,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-
-import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import { todoSchema } from "@/app/schema/newTodoSchema";
-import { DatePicker } from "./DatePicker";
 import { toast } from "sonner";
-import { SelectPriority } from "./TodoList/SelectPriority";
-import { SelectCategory } from "./TodoList/SelectCategory";
+import { SelectPriority } from "../../TodoList/SelectPriority";
+import { SelectCategory } from "../../TodoList/SelectCategory";
+import { DatePicker } from "./DatePicker";
+import { useAddTodo } from "../../hooks/useAddTodo";
 
 export type FormData = {
   title: string;
@@ -36,7 +33,6 @@ export type FormData = {
 export const AddToDo = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState<Date>();
-  const [isPending, startTransition] = useTransition();
 
   const {
     register,
@@ -50,36 +46,40 @@ export const AddToDo = () => {
 
   const user = useUser();
 
-  const router = useRouter();
+  const { mutate, isPending } = useAddTodo();
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = (data: FormData) => {
     const userId = user.user?.id;
     if (userId && date) {
-      startTransition(async () => {
-        await createTodo(
-          data.title,
+      mutate(
+        {
+          title: data.title,
           userId,
-          data.deadline,
-          data.matrix,
-          data.category
-        );
-      });
-      console.log(data);
-      setIsOpen(false);
-      reset({
-        title: "",
-      });
-      setDate(undefined);
+          deadline: date,
+          matrix: data.matrix,
+          category: data.category,
+        },
+        {
+          onSuccess: () => {
+            setIsOpen(false);
+            reset({ title: "" });
+            setDate(undefined);
+          },
+          onError: () => {
+            toast.error("Failed to add ToDo. Please try again.");
+          },
+        }
+      );
     }
-    router.refresh();
-    toast("ToDo added to your list ✔");
   };
 
   return (
-    <section className="self-end mr-4">
+    <section className="self-end py-2 mr-4">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button variant={"default"}>Add to do</Button>
+          <Button variant={"default"} size={"sm"}>
+            Add to do
+          </Button>
         </DialogTrigger>
         <DialogContent className="flex flex-col justify-center items-start w-96">
           <DialogHeader>
@@ -117,7 +117,6 @@ export const AddToDo = () => {
                     Date is required
                   </p>
                 )}
-
                 <div className="flex gap-4 mt-1">
                   <div className="flex flex-col w-full ">
                     <SelectPriority setValue={setValue} />
@@ -142,7 +141,7 @@ export const AddToDo = () => {
                 type="submit"
                 disabled={isPending}
               >
-                Save to do
+                {isPending ? "Saving..." : "Save to do"}
               </Button>
             </form>
           </DialogFooter>

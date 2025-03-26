@@ -1,4 +1,3 @@
-import { deleteTodo } from "@/actions/todos";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,26 +10,21 @@ import {
 } from "@/components/ui/dialog";
 
 import { Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 
-import React, { useState, useTransition } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
+import { useDeleteTodo } from "../hooks/useDeleteTodo";
 
-export const DeleteTodo = ({ todoId }: { todoId: number }) => {
-  const router = useRouter();
+export const DeleteTodo = ({ todoId }: { todoId: string }) => {
+  const { mutateAsync, isPending } = useDeleteTodo();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
 
-  const deleteTodoById = (id: number) => {
+  const deleteTodoById = (id: string) => {
     if (id) {
-      startTransition(async () => {
-        await deleteTodo(id);
-      });
+      mutateAsync({ id });
     }
-
     toast("ToDo deleted from your list ❌");
-    router.refresh();
     setIsOpen(false);
   };
 
@@ -56,6 +50,7 @@ export const DeleteTodo = ({ todoId }: { todoId: number }) => {
                 className="self-start"
                 variant={"outline"}
                 onClick={() => setIsOpen(false)}
+                disabled={isPending}
               >
                 Close
               </Button>

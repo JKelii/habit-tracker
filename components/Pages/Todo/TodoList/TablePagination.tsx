@@ -7,65 +7,36 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 
 type TablePaginationType = {
-  startIndex: number;
-  endIndex: number;
-  setStartIndex: Dispatch<SetStateAction<number>>;
-  setEndIndex: Dispatch<SetStateAction<number>>;
-  rowPerPage: number;
   totalItems: number;
+  handlePreviousPage: () => void;
+  handleNextPage: () => void;
+  page: number;
 };
 
 export const TodoPagination = ({
-  startIndex,
-  endIndex,
-  setStartIndex,
-  setEndIndex,
-  rowPerPage,
   totalItems,
+  handleNextPage,
+  handlePreviousPage,
+  page,
 }: TablePaginationType) => {
-  const currentPage = Math.floor(startIndex / rowPerPage) + 1;
-  const totalPages = Math.ceil(totalItems / rowPerPage);
-
-  const isFirstPage = currentPage === 1;
-  const isLastPage = currentPage === totalPages;
-
-  const handlePreviousPageClick = () => {
-    if (startIndex >= 1) {
-      setStartIndex(startIndex - rowPerPage);
-      setEndIndex(endIndex - rowPerPage);
-    }
-  };
-
-  const handleNextPageClick = () => {
-    if (!isLastPage) {
-      setStartIndex(startIndex + rowPerPage);
-      setEndIndex(endIndex + rowPerPage);
-    }
-  };
-
   return (
-    <Pagination className="mt-4">
+    <Pagination className="mt-1">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
             href="#"
-            onClick={handlePreviousPageClick}
-            className={isFirstPage ? "cursor-not-allowed opacity-50" : ""}
+            onClick={handlePreviousPage}
+            className={page === 1 ? "cursor-not-allowed opacity-50" : ""}
           />
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink href="#">{currentPage}</PaginationLink>
+          <PaginationLink href="#">{page}</PaginationLink>
         </PaginationItem>
-
         <PaginationItem>
-          <PaginationNext
-            href="#"
-            onClick={handleNextPageClick}
-            className={isLastPage ? "cursor-not-allowed opacity-50" : ""}
-          />
+          <PaginationNext href="#" onClick={handleNextPage} />
         </PaginationItem>
       </PaginationContent>
     </Pagination>

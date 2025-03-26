@@ -1,8 +1,9 @@
-import { Todos } from "@/app/types/TodosTypes";
-import { GridCard } from "./GridStats/GridCard";
-import { CheckCircle2, Clock } from "lucide-react";
+import { Todo } from "@prisma/client";
 
-export const TodoGridStats = ({ todos }: { todos: Todos }) => {
+import { CheckCircle2, Clock } from "lucide-react";
+import { GridCard } from "./GridCard";
+
+export const TodoGridStats = ({ todos }: { todos: Todo[] }) => {
   const completedTodosLength = todos.filter((item) => item.completed).length;
   const todosLength = todos.length;
 

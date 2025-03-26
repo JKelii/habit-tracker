@@ -1,5 +1,4 @@
 "use server";
-import { format, isSameDay, subDays } from "date-fns";
 
 import { currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/app/lib/db";
@@ -48,7 +47,7 @@ export const addHabit = async (
   }
 };
 
-export const deleteHabit = async (id: number) => {
+export const deleteHabit = async (id: string) => {
   const deleteHabit = await prisma.habit.delete({
     where: {
       id: id,
@@ -57,58 +56,58 @@ export const deleteHabit = async (id: number) => {
   return deleteHabit;
 };
 
-export const resetHabit = async (habitIds: number[]) => {
-  const today = format(new Date(), "yyyy-MM-dd");
+// export const resetHabit = async (habitIds: number[]) => {
+//   const today = format(new Date(), "yyyy-MM-dd");
 
-  const yesterday = subDays(today, 1);
+//   const yesterday = subDays(today, 1);
 
-  const isYesterday = (date: string) => isSameDay(date, yesterday);
-  if (isYesterday(today)) {
-    const reset = await prisma.habit.updateMany({
-      where: {
-        id: {
-          in: habitIds,
-        },
-        completed: true,
-      },
-      data: {
-        completed: false,
-      },
-    });
-    return reset;
-  } else {
-    return;
-  }
-};
+//   const isYesterday = (date: string) => isSameDay(date, yesterday);
+//   if (isYesterday(today)) {
+//     const reset = await prisma.habit.updateMany({
+//       where: {
+//         id: {
+//           in: habitIds,
+//         },
+//         completed: true,
+//       },
+//       data: {
+//         completed: false,
+//       },
+//     });
+//     return reset;
+//   } else {
+//     return;
+//   }
+// };
 
-export const completeHabit = async (habitId: number, streak: number) => {
-  const today = format(new Date(), "dd-MM-yyyy");
+// export const completeHabit = async (habitId: number, streak: number) => {
+//   const today = format(new Date(), "dd-MM-yyyy");
 
-  const yesterday = subDays(today, 1);
+//   const yesterday = subDays(today, 1);
 
-  const isYesterday = (date: string) => isSameDay(date, yesterday);
+//   const isYesterday = (date: string) => isSameDay(date, yesterday);
 
-  if (isYesterday(today)) {
-    const complete = await prisma.habit.update({
-      where: {
-        id: habitId,
-      },
-      data: {
-        completed: true,
-        streak: streak + 1,
-      },
-    });
-    return complete;
-  } else {
-    const reset = await prisma.habit.update({
-      where: {
-        id: habitId,
-      },
-      data: {
-        completed: true,
-        streak: (streak = 1),
-      },
-    });
-    return reset;
-  }
-};
+//   if (isYesterday(today)) {
+//     const complete = await prisma.habit.update({
+//       where: {
+//         id: habitId,
+//       },
+//       data: {
+//         completed: true,
+//         streak: streak + 1,
+//       },
+//     });
+//     return complete;
+//   } else {
+//     const reset = await prisma.habit.update({
+//       where: {
+//         id: habitId,
+//       },
+//       data: {
+//         completed: true,
+//         streak: (streak = 1),
+//       },
+//     });
+//     return reset;
+//   }
+// };

@@ -1,50 +1,18 @@
-import { getTodos } from "@/actions/todos";
-import { AddToDo } from "@/components/Pages/Todo/AddToDo";
-import { TodoGridStats } from "@/components/Pages/Todo/TodoGridStats";
-import { TodosList } from "@/components/Pages/Todo/TodoList/TodosList";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { currentUser } from "@clerk/nextjs/server";
+import { TodosPage } from "@/components/Pages/Todo/TodoList/TodosPage";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ListTodo } from "lucide-react";
 
-import React from "react";
-
 const page = async () => {
-  const user = await currentUser();
-  const todos = await getTodos();
-
   return (
-    <div className="flex flex-col justify-center items-center p-2">
-      <Card className="w-full flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center px-2">
+      <Card className="w-full flex flex-col justify-center items-center ">
         <CardHeader>
           <CardTitle className="flex justify-center items-center gap-2 text-xl">
             ToDos <ListTodo />
           </CardTitle>
-          <CardDescription>Add things to your list</CardDescription>
         </CardHeader>
         <CardContent className="self-start flex flex-col w-full justify-center items-center">
-          {user ? (
-            <>
-              <TodoGridStats todos={todos} />
-              <AddToDo />
-              {todos.length >= 1 ? (
-                <TodosList todos={todos} />
-              ) : (
-                <>
-                  <p className="font-bold text-2xl">
-                    You finished all your tasks
-                  </p>
-                </>
-              )}
-            </>
-          ) : (
-            <p>You have to be logged in</p>
-          )}
+          <TodosPage />
         </CardContent>
       </Card>
     </div>

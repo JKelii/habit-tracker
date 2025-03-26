@@ -27,7 +27,7 @@ model User {
 }
 
 model Todo {
-  id          Int      @id @default(autoincrement())
+  id          String      @id  @default(cuid())
   title       String
   createdAt   DateTime @default(now())
   toBeDone    DateTime
@@ -39,7 +39,7 @@ model Todo {
 }
 
 model Habit {
-  id Int @id @default(autoincrement())
+  id          String      @id @default(cuid())
   userId String
   title String
   description String
@@ -52,7 +52,7 @@ model Habit {
 }
 
 model Pomodoro {
-  id Int @id @default(autoincrement())
+ id          String      @id  @default(cuid())
   userId String
   createdAt  DateTime @default(now())
   finished DateTime @default(now())

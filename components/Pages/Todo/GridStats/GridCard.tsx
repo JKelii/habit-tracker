@@ -22,8 +22,8 @@ export const GridCard = ({
 }: GridCardType) => {
   return (
     <Card>
-      <CardContent className="p-4 flex items-center gap-4 flex-1">
-        <div className=" p-3 rounded-full">{icon}</div>
+      <CardContent className="pb-2.5 flex items-center gap-4 flex-1">
+        <div className=" rounded-full">{icon}</div>
         <div>
           <p className="text-sm text-muted-foreground">{statName}</p>
           <p className="text-2xl font-bold">

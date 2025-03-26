@@ -1,41 +1,48 @@
 "use client";
-import { setCompleteStatus } from "@/actions/todos";
+
 import { Checkbox } from "@/components/ui/checkbox";
-import { DeleteTodo } from "../DeleteTodo";
-import { useRouter } from "next/navigation";
-import { ModifyTodo } from "../ModifyTodo";
-import { TodoPagination } from "./TablePagination";
-import { useState } from "react";
-import { Todos } from "@/app/types/TodosTypes";
+import { DeleteTodo } from "../ModifyTodo/DeleteTodo";
+
+import { ModifyTodo } from "../ModifyTodo/ModifyTodo";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { CategoryBadges } from "./CategoryBadges";
 import { TodoDates } from "./TodoDates";
+import { Todo } from "@prisma/client";
+import { TodoPagination } from "./TablePagination";
+import { AddToDo } from "../ModifyTodo/AddToDo/AddToDo";
+import { useSetComplete } from "../hooks/useSetComplete";
+import { useCallback } from "react";
 
-export const TodosList = ({ todos }: { todos: Todos }) => {
-  const rowPerPage = 10;
-  const [startIndex, setStartIndex] = useState(0);
-  const [endIndex, setEndIndex] = useState(rowPerPage);
-  const router = useRouter();
+type TodoListProps = {
+  todos: Todo[];
+  handlePreviousPage: () => void;
+  handleNextPage: () => void;
+  page: number;
+};
 
-  const setStatus = async (id: number, complete: boolean) => {
-    try {
-      if (id) {
-        await setCompleteStatus(id, complete);
-      }
-      router.refresh();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const TodosList = ({
+  todos,
+  handleNextPage,
+  handlePreviousPage,
+  page,
+}: TodoListProps) => {
+  const { mutateAsync } = useSetComplete();
+
+  const setStatus = useCallback(
+    async (id: string, complete: boolean) => {
+      await mutateAsync({ id, complete });
+    },
+    [mutateAsync]
+  );
 
   return (
     <>
-      <Card className="w-full py-2 mt-4">
+      <Card className="w-full mt-2">
         <CardContent className="flex flex-col w-full gap-2">
+          <AddToDo />
           {todos.length >= 1 &&
             [...todos]
-              .slice(startIndex, endIndex)
               .sort((a, b) => Number(a.completed) - Number(b.completed))
               .map((todo) => (
                 <section
@@ -54,7 +61,7 @@ export const TodosList = ({ todos }: { todos: Todos }) => {
                     <article className="flex flex-col justify-center w-44 items-center">
                       <p
                         className={cn(
-                          "self-start text-sm",
+                          "self-start text-sm font-semibold",
                           todo.completed && "line-through"
                         )}
                       >
@@ -76,18 +83,16 @@ export const TodosList = ({ todos }: { todos: Todos }) => {
                   </div>
                 </section>
               ))}
+          {todos.length > 10 && (
+            <TodoPagination
+              totalItems={todos.length}
+              handleNextPage={handleNextPage}
+              handlePreviousPage={handlePreviousPage}
+              page={page}
+            />
+          )}
         </CardContent>
       </Card>
-      {todos.length > rowPerPage && (
-        <TodoPagination
-          startIndex={startIndex}
-          endIndex={endIndex}
-          setStartIndex={setStartIndex}
-          setEndIndex={setEndIndex}
-          rowPerPage={rowPerPage}
-          totalItems={todos.length}
-        />
-      )}
     </>
   );
 };

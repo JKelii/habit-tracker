@@ -1,5 +1,5 @@
 export type HabitsType = {
-  id: number;
+  id: string;
   userId: string;
   title: string;
   createdAt: Date;
@@ -10,7 +10,7 @@ export type HabitsType = {
 }[];
 
 export type HabitType = {
-  id: number;
+  id: string;
   userId: string;
   title: string;
   createdAt: Date;

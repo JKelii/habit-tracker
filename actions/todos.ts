@@ -43,7 +43,7 @@ export const createTodo = async (
   return create;
 };
 
-export const deleteTodo = async (id: number) => {
+export const deleteTodo = async (id: string) => {
   const deleteTodoById = await prisma.todo.delete({
     where: {
       id: id,
@@ -52,7 +52,7 @@ export const deleteTodo = async (id: number) => {
   return deleteTodoById;
 };
 
-export const setCompleteStatus = async (id: number, complete: boolean) => {
+export const setCompleteStatus = async (id: string, complete: boolean) => {
   const updatedTodo = await prisma.todo.update({
     where: { id },
     data: { completed: !complete },
@@ -61,7 +61,7 @@ export const setCompleteStatus = async (id: number, complete: boolean) => {
   return updatedTodo;
 };
 
-export const updateTodoTitle = async (id: number, title: string) => {
+export const updateTodoTitle = async (id: string, title: string) => {
   const updateTitle = await prisma.todo.update({
     where: {
       id: id,
@@ -115,7 +115,7 @@ export const getTodoByDeadline = async () => {
   }
 };
 
-export const updateDraggedMatrix = async (matrix: string, id: number) => {
+export const updateDraggedMatrix = async (matrix: string, id: string) => {
   try {
     const user = await currentUser();
     const userId = user?.id;
