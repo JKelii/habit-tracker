@@ -13,18 +13,23 @@ export const TodoDates = ({
   };
 
   const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
+  today.setHours(0, 0, 0, 0);
   const deadlineDate = new Date(deadline);
-  const pastDate = yesterday > deadlineDate;
+  deadlineDate.setHours(0, 0, 0, 0);
 
+  const pastDate = today > deadlineDate;
+  const tillToday = today.getTime() === deadlineDate.getTime();
   return (
     <>
       <p className="font-semibold w-36 text-xs">
         Created at: {formatDate(createdAt)}
       </p>
       <p
-        className={cn("font-semibold w-36 text-xs", pastDate && "text-red-500")}
+        className={cn(
+          "font-semibold w-36 text-xs",
+          pastDate && "text-red-500",
+          tillToday && "text-amber-500"
+        )}
       >
         Deadline: {formatDate(deadline)}
       </p>

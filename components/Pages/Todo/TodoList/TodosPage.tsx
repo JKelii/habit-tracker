@@ -1,15 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
 import { Todo } from "@/app/types/TodosTypes";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { TodosList } from "./TodosList";
 import { TodoGridStats } from "../GridStats/TodoGridStats";
 import TodosLoadingSkeleton from "./TodosLoadingSkeleton";
+import { useState } from "react";
 
 type ApiResponse = {
   todos: Todo[];
   totalPages: number;
+  totalCount: number;
+  uniqueCategoriesCount: number;
+  completeTillToday: number;
+  completedTodos: number;
 };
 
 const fetchProducts = async (
@@ -25,9 +29,8 @@ const fetchProducts = async (
 };
 
 export const TodosPage = () => {
-  const [page, setPage] = useState(1);
-
   const pageSize = 10;
+  const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery<ApiResponse>({
     queryKey: ["todos", page],
@@ -41,28 +44,24 @@ export const TodosPage = () => {
 
   const todos = data?.todos ?? [];
   const totalPages = data?.totalPages ?? 0;
-
-  const handleNextPage = () => {
-    if (page < totalPages) {
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (page > 1) {
-      setPage((prev) => prev - 1);
-    }
-  };
+  const uniqueCategoriesCount = data?.uniqueCategoriesCount;
+  const completeTillToday = data?.completeTillToday;
+  const completedTodos = data?.completedTodos;
+  const totalCount = data?.totalCount ?? 0;
 
   return (
     <>
-      <TodoGridStats todos={todos} />
-
+      <TodoGridStats
+        totalCount={totalCount}
+        uniqueCategoriesCount={uniqueCategoriesCount}
+        completeTillToday={completeTillToday}
+        completedTodos={completedTodos}
+      />
       <TodosList
+        totalPages={totalPages}
         todos={todos}
-        handleNextPage={handleNextPage}
-        handlePreviousPage={handlePreviousPage}
         page={page}
+        setPage={setPage}
       />
     </>
   );

@@ -1,4 +1,3 @@
-import { updateTodoTitle } from "@/actions/todos";
 import { modifyTodoSchema } from "@/app/schema/modifyTodoTitle";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,9 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SquarePen } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useModifyTodo } from "../hooks/useModifyTodo";
 
 type ModifyTodoType = {
   title: string;
@@ -29,18 +28,17 @@ type formData = {
 
 export const ModifyTodo = ({ title, id }: ModifyTodoType) => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
 
+  const { mutate } = useModifyTodo();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<formData>({ resolver: yupResolver(modifyTodoSchema) });
 
-  const handleFormSubmit = async (data: formData) => {
-    await updateTodoTitle(id, data.title);
+  const handleFormSubmit = (data: formData) => {
+    mutate({ id, title: data.title });
     setIsOpen((prev) => !prev);
-    router.refresh();
   };
 
   return (

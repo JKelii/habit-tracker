@@ -1,27 +1,22 @@
-import { Todo } from "@prisma/client";
-
-import { CheckCircle2, Clock } from "lucide-react";
+import { BookType, CheckCircle2, Clock } from "lucide-react";
 import { GridCard } from "./GridCard";
 
-export const TodoGridStats = ({ todos }: { todos: Todo[] }) => {
-  const completedTodosLength = todos.filter((item) => item.completed).length;
-  const todosLength = todos.length;
+type TodoGridStatsProps = {
+  completeTillToday: number | undefined;
+  uniqueCategoriesCount: number | undefined;
+  completedTodos: number | undefined;
+  totalCount: number | undefined;
+};
 
-  const completionPercentage =
-    todosLength > 0
-      ? Number(((completedTodosLength / todosLength) * 100).toFixed(0))
-      : 0;
-
-  const today = new Date().toLocaleDateString();
-
-  const dueToday = todos.filter((item) => {
-    const itemDate = new Date(item.toBeDone).toLocaleDateString();
-    return itemDate === today;
-  });
-
-  const categoriesLength = todos
-    .map((item) => item.category)
-    .filter((value, index, self) => self.indexOf(value) === index).length;
+export const TodoGridStats = ({
+  completeTillToday,
+  uniqueCategoriesCount,
+  completedTodos = 0,
+  totalCount = 0,
+}: TodoGridStatsProps) => {
+  const completedOutOfAll = Number(
+    ((completedTodos / totalCount) * 100).toFixed(0)
+  );
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
@@ -30,21 +25,23 @@ export const TodoGridStats = ({ todos }: { todos: Todo[] }) => {
           <CheckCircle2 className="size-8 text-blue-600 dark:text-blue-300" />
         }
         statName="Completion Rate"
-        stat={completionPercentage}
+        stat={completedOutOfAll}
         operator="%"
-        completedStat={completedTodosLength}
-        completedStatLength={todos.length}
+        completedStat={completedTodos}
+        completedStatLength={totalCount}
       />
       <GridCard
         icon={<Clock className="size-8 text-purple-600 dark:text-purple-300" />}
         statName="Due Today"
-        stat={dueToday.length}
+        stat={completeTillToday ?? 0}
         statDescription="Tasks to complete today"
       />
       <GridCard
-        icon={<Clock className="size-8 text-orange-600 dark:text-orange-300" />}
+        icon={
+          <BookType className="size-8 text-orange-600 dark:text-orange-300" />
+        }
         statName="Categories"
-        stat={categoriesLength}
+        stat={uniqueCategoriesCount ?? 0}
         statDescription="Different task types"
       />
     </div>

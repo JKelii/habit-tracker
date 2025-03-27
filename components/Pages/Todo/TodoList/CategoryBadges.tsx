@@ -15,6 +15,17 @@ export const CategoryBadges = ({
       <Badge
         className={cn(
           "text-white",
+          matrix === "1" && "bg-purple-500",
+          matrix === "2" && "bg-red-500",
+          matrix === "3" && "bg-yellow-500",
+          matrix === "4" && "bg-green-500"
+        )}
+      >
+        {MATRIX_LABELS[matrix]}
+      </Badge>
+      <Badge
+        className={cn(
+          "text-white",
           category === "Personal" && "bg-blue-700",
           category === "Work" && "bg-amber-950",
           category === "Shopping" && "bg-pink-800",
@@ -25,17 +36,6 @@ export const CategoryBadges = ({
         )}
       >
         {category}
-      </Badge>
-      <Badge
-        className={cn(
-          "text-white",
-          matrix === "1" && "bg-purple-500",
-          matrix === "2" && "bg-red-500",
-          matrix === "3" && "bg-orange-500",
-          matrix === "4" && "bg-green-500"
-        )}
-      >
-        {MATRIX_LABELS[matrix]}
       </Badge>
     </div>
   );

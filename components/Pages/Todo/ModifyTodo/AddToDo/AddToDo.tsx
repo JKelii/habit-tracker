@@ -74,7 +74,7 @@ export const AddToDo = () => {
   };
 
   return (
-    <section className="self-end py-2 mr-4">
+    <section className="self-end py-3 mr-4">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <Button variant={"default"} size={"sm"}>

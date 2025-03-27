@@ -12,7 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
-import { FormData } from "./ModifyTodo/AddToDo/AddToDo";
+import { FormData } from "./AddToDo";
 
 export const DatePicker = ({
   setDate,

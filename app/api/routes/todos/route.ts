@@ -23,9 +23,35 @@ export async function GET(req: NextRequest) {
     });
 
     const totalCount = await prisma.todo.count({ where: { userId } });
+
+    const today = new Date();
+
+    const completeTillToday = await prisma.todo.count({
+      where: { userId, toBeDone: { lt: today } },
+    });
+
+    const uniqueCategories = await prisma.todo.findMany({
+      where: { userId },
+      select: { category: true },
+      distinct: ["category"],
+    });
+
+    const completedTodos = await prisma.todo.count({
+      where: { userId, completed: true },
+    });
+
+    const uniqueCategoriesCount = uniqueCategories.length;
+
     const totalPages = Math.ceil(totalCount / pageSize);
 
-    return NextResponse.json({ todos, totalPages });
+    return NextResponse.json({
+      todos,
+      totalPages,
+      totalCount,
+      uniqueCategoriesCount,
+      completeTillToday,
+      completedTodos,
+    });
   } catch (error) {
     console.error("API error:", error);
     return NextResponse.json(

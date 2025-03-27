@@ -2,7 +2,6 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { DeleteTodo } from "../ModifyTodo/DeleteTodo";
-
 import { ModifyTodo } from "../ModifyTodo/ModifyTodo";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -12,28 +11,28 @@ import { Todo } from "@prisma/client";
 import { TodoPagination } from "./TablePagination";
 import { AddToDo } from "../ModifyTodo/AddToDo/AddToDo";
 import { useSetComplete } from "../hooks/useSetComplete";
-import { useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 
 type TodoListProps = {
   todos: Todo[];
-  handlePreviousPage: () => void;
-  handleNextPage: () => void;
+  totalPages: number;
   page: number;
+  setPage: Dispatch<SetStateAction<number>>;
 };
 
 export const TodosList = ({
   todos,
-  handleNextPage,
-  handlePreviousPage,
+  totalPages,
   page,
+  setPage,
 }: TodoListProps) => {
-  const { mutateAsync } = useSetComplete();
+  const { mutate } = useSetComplete();
 
   const setStatus = useCallback(
     async (id: string, complete: boolean) => {
-      await mutateAsync({ id, complete });
+      mutate({ id, complete });
     },
-    [mutateAsync]
+    [mutate]
   );
 
   return (
@@ -41,6 +40,7 @@ export const TodosList = ({
       <Card className="w-full mt-2">
         <CardContent className="flex flex-col w-full gap-2">
           <AddToDo />
+
           {todos.length >= 1 &&
             [...todos]
               .sort((a, b) => Number(a.completed) - Number(b.completed))
@@ -49,7 +49,11 @@ export const TodosList = ({
                   key={todo.id}
                   className={cn(
                     "flex justify-between items-center w-full gap-4 flex-1 hover:bg-gray-100/5 rounded-lg py-1 border px-1",
-                    todo.completed && "bg-gray-100/15"
+                    todo.completed && "bg-gray-100/15",
+                    todo.matrix === "1" && "border-l-4 border-l-purple-500",
+                    todo.matrix === "2" && "border-l-4 border-l-red-500",
+                    todo.matrix === "3" && "border-l-4 border-l-yellow-500",
+                    todo.matrix === "4" && "border-l-4 border-l-green-500"
                   )}
                 >
                   <div className="flex items-center gap-8">
@@ -83,12 +87,11 @@ export const TodosList = ({
                   </div>
                 </section>
               ))}
-          {todos.length > 10 && (
+          {totalPages > 1 && (
             <TodoPagination
-              totalItems={todos.length}
-              handleNextPage={handleNextPage}
-              handlePreviousPage={handlePreviousPage}
+              totalPages={totalPages}
               page={page}
+              setPage={setPage}
             />
           )}
         </CardContent>

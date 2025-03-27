@@ -4,12 +4,10 @@ import { Drama, Lightbulb, TrainFront, TriangleAlert } from "lucide-react";
 import { MatrixCard } from "./MatrixCard";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { updateDraggedMatrix } from "@/actions/todos";
-import {
-  Column as ColumnType,
-  TodosType,
-} from "../../../app/types/MatrixTypes";
+import { Column as ColumnType } from "../../../app/types/MatrixTypes";
 import { useRouter } from "next/navigation";
 import { startTransition, useMemo, useOptimistic } from "react";
+import { TodosType } from "@/app/types/TodosTypes";
 
 const COLUMNS: ColumnType[] = [
   {
@@ -42,7 +40,7 @@ export const MatrixList = ({ todos }: TodosType) => {
     const { active, over } = event;
     if (!over) return;
 
-    const taskId = Number(active.id);
+    const taskId = active.id as string;
     const newMatrix = over.id as string;
 
     startTransition(() => {

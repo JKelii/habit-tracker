@@ -16,13 +16,13 @@ import { toast } from "sonner";
 import { useDeleteTodo } from "../hooks/useDeleteTodo";
 
 export const DeleteTodo = ({ todoId }: { todoId: string }) => {
-  const { mutateAsync, isPending } = useDeleteTodo();
+  const { mutate, isPending } = useDeleteTodo();
 
   const [isOpen, setIsOpen] = useState(false);
 
   const deleteTodoById = (id: string) => {
     if (id) {
-      mutateAsync({ id });
+      mutate({ id });
     }
     toast("ToDo deleted from your list ❌");
     setIsOpen(false);
