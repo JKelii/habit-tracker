@@ -38,10 +38,10 @@ export const HabitContentHeader = ({
             <CardDescription>{habit.description}</CardDescription>
           </div>
         </div>
-        <div className="flex items-center gap-2 bg-red-500/25 text-orange-700 px-3 py-1 rounded-full">
-          <Flame className="h-5 w-5 text-orange-500" />
+        <div className="flex items-center gap-2 border-red-500 border text-red-500 px-3 py-1 rounded-full">
+          <Flame className="h-5 w-5 text-red-500" />
           <span className="font-semibold">{habit.streak}</span>
-          <span className="text-sm">day streak</span>
+          <span className="text-sm font-semibold">day streak</span>
         </div>
       </div>
     </CardHeader>

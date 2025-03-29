@@ -3,7 +3,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { cn } from "@/lib/utils";
 import { GripVertical } from "lucide-react";
 
-export const DraggableTask = ({ id, title }: { id: number; title: string }) => {
+export const DraggableTask = ({ id, title }: { id: string; title: string }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: id,

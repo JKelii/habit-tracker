@@ -1,14 +1,13 @@
 "use server";
 
 import { prisma } from "@/app/lib/db";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 export const getPomodoros = async () => {
-  const user = await currentUser();
-  const userId = user?.id;
-
   try {
-    if (!user || !user.id) {
+    const user = await auth();
+    const userId = user?.userId;
+    if (!user || !userId) {
       throw new Error("Can't find pomodoro");
     }
     const pomodoro = await prisma.pomodoro.findMany({

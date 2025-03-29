@@ -1,5 +1,5 @@
 import { prisma } from "@/app/lib/db";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -8,8 +8,8 @@ export async function GET(req: NextRequest) {
     const page = Number(url.searchParams.get("page")) || 1;
     const pageSize = Number(url.searchParams.get("pageSize")) || 10;
 
-    const user = await currentUser();
-    const userId = user?.id;
+    const user = await auth();
+    const userId = user.userId;
 
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

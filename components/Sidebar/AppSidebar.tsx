@@ -20,6 +20,7 @@ import { items } from "@/constants/items";
 import { ChartArea, ListChecks } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { ThemeSelect } from "./ThemeSelect";
 
 export const AppSidebar = () => {
   const { isMobile, toggleSidebar } = useSidebar();
@@ -115,13 +116,14 @@ export const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
       <SidebarFooter>
         <SidebarGroupLabel className="text-sm text-muted-foreground uppercase font-semibold">
           SETTINGS
         </SidebarGroupLabel>
-
-        <UserSection />
+        <div className="flex items-center">
+          <UserSection />
+          <ThemeSelect />
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

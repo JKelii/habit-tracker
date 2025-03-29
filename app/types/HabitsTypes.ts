@@ -7,6 +7,7 @@ export type HabitsType = {
   completed: boolean;
   streak: number;
   image: string;
+  completionDates: Date[];
 }[];
 
 export type HabitType = {
@@ -18,4 +19,5 @@ export type HabitType = {
   completed: boolean;
   streak: number;
   image: string | null;
+  completionDates: Date[];
 };

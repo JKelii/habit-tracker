@@ -1,4 +1,4 @@
-import { getHabits } from "@/actions/habits";
+"use client";
 import { AddHabit } from "@/components/Pages/Habits/AddHabit";
 import { HabitsList } from "@/components/Pages/Habits/HabitsList";
 import {
@@ -8,14 +8,34 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { currentUser } from "@clerk/nextjs/server";
+import { useQuery } from "@tanstack/react-query";
 import { ListChecks } from "lucide-react";
+import { HabitsType } from "../types/HabitsTypes";
+import LoadingHabitsList from "@/components/Pages/Habits/LoadingHabitsList";
 
-const HabitsPage = async () => {
-  const user = await currentUser();
-  const habits = await getHabits();
-  //TODO: ADD IMAGES/ICONS
-  //TODO: CHANGE TABLE TO SOMETHING ELSE
+type ApiResponse = {
+  habits: HabitsType;
+};
+
+const fetchHabits = async (): Promise<ApiResponse> => {
+  const res = await fetch(`/api/routes/habits`);
+  if (!res.ok) throw new Error("Can't fetch items");
+  const data = await res.json();
+  return data;
+};
+
+const HabitsPage = () => {
+  const { data, isLoading, error } = useQuery<ApiResponse>({
+    queryKey: ["habits"],
+    queryFn: fetchHabits,
+  });
+
+  if (isLoading) return <LoadingHabitsList />;
+  if (error instanceof Error)
+    return <p className="text-destructive text-sm">Error: {error.message}</p>;
+
+  const habits = data?.habits ?? [];
+  console.log("To jest habit", habits);
 
   return (
     <main className="flex flex-col justify-center items-center p-4">
@@ -28,17 +48,7 @@ const HabitsPage = async () => {
         </CardHeader>
         <CardContent className="self-start flex flex-col w-full justify-center items-center">
           <AddHabit />
-          {user ? (
-            <>
-              {habits ? (
-                <HabitsList habits={habits} />
-              ) : (
-                <p className="font-bold text-2xl">You have nothing to do?</p>
-              )}
-            </>
-          ) : (
-            <p>You have to be logged in</p>
-          )}
+          <HabitsList habits={habits} />
         </CardContent>
       </Card>
     </main>

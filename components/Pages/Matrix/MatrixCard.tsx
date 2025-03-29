@@ -1,8 +1,9 @@
 "use client";
 import { Card } from "@/components/ui/card";
 import { DraggableTask } from "./DraggableTask";
-import { Column, TodoType } from "@/app/types/MatrixTypes";
+import { Column } from "@/app/types/MatrixTypes";
 import { useDroppable } from "@dnd-kit/core";
+import { Todo } from "@/app/types/TodosTypes";
 
 //ADD SCROLL AREA?
 
@@ -11,7 +12,7 @@ export const MatrixCard = ({
   todos,
 }: {
   column: Column;
-  todos: TodoType[];
+  todos: Todo[];
 }) => {
   const { setNodeRef } = useDroppable({ id: column.matrix });
 

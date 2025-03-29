@@ -16,7 +16,7 @@ type ApiResponse = {
   completedTodos: number;
 };
 
-const fetchProducts = async (
+const fetchTodos = async (
   page: number,
   pageSize: number
 ): Promise<ApiResponse> => {
@@ -34,7 +34,7 @@ export const TodosPage = () => {
 
   const { data, isLoading, error } = useQuery<ApiResponse>({
     queryKey: ["todos", page],
-    queryFn: () => fetchProducts(page, pageSize),
+    queryFn: () => fetchTodos(page, pageSize),
     placeholderData: keepPreviousData,
   });
 
