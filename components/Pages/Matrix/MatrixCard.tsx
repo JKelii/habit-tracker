@@ -24,7 +24,7 @@ export const MatrixCard = ({
       </div>
       <div
         ref={setNodeRef}
-        className="flex justify-start w-full h-full  flex-col items-center gap-2 mt-2 "
+        className="flex justify-start w-full h-full  flex-col items-center gap-2 mt-2 pb-4 "
       >
         {todos?.map((item) => (
           <DraggableTask key={item.id} id={item.id} title={item.title} />

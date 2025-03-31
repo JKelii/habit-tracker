@@ -18,10 +18,11 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { todoSchema } from "@/app/schema/newTodoSchema";
 import { toast } from "sonner";
-import { SelectPriority } from "../../TodoList/SelectPriority";
+import { SelectPriority } from "./SelectPriority";
 import { SelectCategory } from "../../TodoList/SelectCategory";
 import { DatePicker } from "./DatePicker";
 import { useAddTodo } from "../../hooks/useAddTodo";
+import LoadingButton from "@/components/Universal/LoadingButton";
 
 export type FormData = {
   title: string;
@@ -99,7 +100,7 @@ export const AddToDo = () => {
               <Input id="todo" {...register("title")} />
               {errors.title && (
                 <p className="ml-1 text-sm text-red-500  font-semibold self-start">
-                  Title is required
+                  Title is required (max 32 chars)
                 </p>
               )}
               <div className="self-start w-full flex flex-col">
@@ -136,13 +137,13 @@ export const AddToDo = () => {
                   </div>
                 </div>
               </div>
-              <Button
-                className="mt-4 self-end"
+              <LoadingButton
+                className="mt-4 self-end w-28"
                 type="submit"
-                disabled={isPending}
+                loading={isPending}
               >
-                {isPending ? "Saving..." : "Save to do"}
-              </Button>
+                Save to do
+              </LoadingButton>
             </form>
           </DialogFooter>
         </DialogContent>

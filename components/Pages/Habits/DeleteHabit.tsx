@@ -1,5 +1,4 @@
 "use client";
-import { deleteHabit } from "@/actions/habits";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,39 +7,28 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-
 import { Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useDeleteHabit } from "./hooks/useDeleteHabit";
 
-import React, { useState, useTransition } from "react";
-import { toast } from "sonner";
+type DeleteHabitProps = {
+  habitId: string;
+  open: boolean;
+  onClose: () => void;
+};
 
-export const DeleteHabit = ({ habitId }: { habitId: number }) => {
-  const router = useRouter();
+export const DeleteHabit = ({ habitId, open, onClose }: DeleteHabitProps) => {
+  const mutation = useDeleteHabit();
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
-
-  const deleteHabitById = (id: number) => {
-    if (id) {
-      startTransition(async () => {
-        await deleteHabit(id);
-      });
+  function handleOpenChange(open: boolean) {
+    if (!open || !mutation.isPending) {
+      onClose();
     }
-    router.refresh();
-    toast("Habit deleted from your list ❌");
-  };
+  }
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <Button variant={"outline"}>
-            <Trash2 className="text-red-500" />
-          </Button>
-        </DialogTrigger>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="flex flex-col justify-center items-start w-96 ">
           <DialogHeader>
             <DialogTitle>Are you sure you want to delete?</DialogTitle>
@@ -54,14 +42,17 @@ export const DeleteHabit = ({ habitId }: { habitId: number }) => {
               <Button
                 className="self-start"
                 variant={"outline"}
-                onClick={() => setIsOpen(false)}
+                onClick={onClose}
               >
                 Close
               </Button>
               <Button
                 variant={"destructive"}
-                onClick={() => deleteHabitById(habitId)}
-                disabled={isPending}
+                onClick={() => {
+                  console.log("Clicked delete button, habitId:", habitId);
+                  mutation.mutate({ habitId }, { onSuccess: onClose });
+                }}
+                disabled={mutation.isPending}
               >
                 <Trash2 /> Delete
               </Button>

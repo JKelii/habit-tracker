@@ -5,13 +5,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 type ModifyTodoType = {
   title: string;
   id: string;
+  matrix: string;
 };
 
 export function useModifyTodo() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, title }: ModifyTodoType) => updateTodoTitle(id, title),
+    mutationFn: ({ id, title, matrix }: ModifyTodoType) =>
+      updateTodoTitle(id, title, matrix),
     onMutate: async ({ id, title }) => {
       queryClient.cancelQueries({ queryKey: ["todos"] });
 

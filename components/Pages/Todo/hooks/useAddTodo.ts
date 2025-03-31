@@ -22,7 +22,7 @@ export function useAddTodo() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: TodoInput) =>
+    mutationFn: async (data: TodoInput) =>
       createTodo(
         data.title,
         data.userId,

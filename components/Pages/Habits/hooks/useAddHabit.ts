@@ -1,18 +1,21 @@
-import { completeHabit } from "@/actions/habits";
+import { addHabit } from "@/actions/habits";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-type UpdateHabit = {
-  habitId: string;
-  streak: number;
+type HabitInput = {
+  title: string;
+  userId: string;
+  icon?: string;
+  description: string;
 };
 
-export function useCompleteHabit() {
+export function useAddHabit() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: UpdateHabit) => {
-      return completeHabit(data.habitId, data.streak);
+    mutationFn: async (data: HabitInput) => {
+      return addHabit(data.title, data.userId, data.icon, data.description);
     },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["habits"] });
     },

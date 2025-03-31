@@ -16,6 +16,7 @@ import { SquarePen } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useModifyTodo } from "../hooks/useModifyTodo";
+import { SelectModifyPriority } from "./SelectModifyPriority";
 
 type ModifyTodoType = {
   title: string;
@@ -24,6 +25,7 @@ type ModifyTodoType = {
 
 type formData = {
   title: string;
+  matrix: string;
 };
 
 export const ModifyTodo = ({ title, id }: ModifyTodoType) => {
@@ -33,11 +35,12 @@ export const ModifyTodo = ({ title, id }: ModifyTodoType) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<formData>({ resolver: yupResolver(modifyTodoSchema) });
 
   const handleFormSubmit = (data: formData) => {
-    mutate({ id, title: data.title });
+    mutate({ id, title: data.title, matrix: data.matrix });
     setIsOpen((prev) => !prev);
   };
 
@@ -58,13 +61,23 @@ export const ModifyTodo = ({ title, id }: ModifyTodoType) => {
           </DialogHeader>
           <form onSubmit={handleSubmit(handleFormSubmit)}>
             <Label htmlFor={title}>Title</Label>
-            <Input defaultValue={title} id={title} {...register("title")} />
+            <Input
+              defaultValue={title}
+              id={title}
+              {...register("title")}
+              className="mb-2"
+            />
             {errors.title && (
               <p className="text-sm text-red-500  font-semibold self-start">
                 Title is required
               </p>
             )}
-
+            <SelectModifyPriority setValue={setValue} />
+            {errors.matrix && (
+              <p className="text-sm text-red-500  font-semibold self-start">
+                Priority is required
+              </p>
+            )}
             <DialogFooter className="w-full mt-4">
               <div className="flex justify-between w-full items-center">
                 <Button

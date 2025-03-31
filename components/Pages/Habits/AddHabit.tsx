@@ -1,5 +1,5 @@
 "use client";
-import { addHabit } from "@/actions/habits";
+
 import { habitSchema } from "@/app/schema/newHabitSchema";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,10 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@clerk/nextjs";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/navigation";
-import React, { useState, useTransition } from "react";
+
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { HabitIcons } from "./HabitIcons";
+import { useAddHabit } from "./hooks/useAddHabit";
 
 type FormData = {
   title: string;
@@ -27,27 +28,34 @@ type FormData = {
 
 export const AddHabit = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
+
   const {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(habitSchema),
   });
 
+  const mutation = useAddHabit();
+
   const user = useUser();
-  const router = useRouter();
+
   const onSubmit = (data: FormData) => {
     const userId = user.user?.id;
-    startTransition(async () => {
-      if (userId) {
-        await addHabit(data.title, userId, data.icon, data.description);
-      }
-      setIsOpen(false);
-      router.refresh();
-    });
+
+    if (userId) {
+      mutation.mutate({
+        title: data.title,
+        userId,
+        description: data.description,
+        icon: data.icon,
+      });
+    }
+
+    setIsOpen(false);
   };
 
   return (
@@ -92,7 +100,7 @@ export const AddHabit = () => {
             <Button
               className="mt-4 self-end "
               type="submit"
-              disabled={isPending}
+              disabled={mutation.isPending}
             >
               Save habit
             </Button>
