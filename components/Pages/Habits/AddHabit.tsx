@@ -54,7 +54,7 @@ export const AddHabit = () => {
         icon: data.icon,
       });
     }
-
+    reset({ description: "", icon: "", title: "" });
     setIsOpen(false);
   };
 

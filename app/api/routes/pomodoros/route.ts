@@ -1,5 +1,6 @@
 import { prisma } from "@/app/lib/db";
-import { HabitsPage } from "@/app/types/HabitsTypes";
+import { PomodorosPage } from "@/app/types/Pomodoro";
+
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,22 +16,22 @@ export async function GET(req: NextRequest) {
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const habits = await prisma.habit.findMany({
+    const pomodoros = await prisma.pomodoro.findMany({
       where: {
         userId: userId,
       },
       orderBy: {
-        createdAt: "asc",
+        createdAt: "desc",
       },
       take: pageSize + 1,
       cursor: cursor ? { id: cursor } : undefined,
     });
 
-    const nextCursor = habits.length > pageSize ? habits[pageSize].id : null;
+    const nextCursor =
+      pomodoros.length > pageSize ? pomodoros[pageSize].id : null;
 
-    const data: HabitsPage = {
-      habits: habits.slice(0, pageSize),
+    const data: PomodorosPage = {
+      pomodoros: pomodoros.slice(0, pageSize),
       nextCursor,
     };
 

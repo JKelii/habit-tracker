@@ -18,7 +18,7 @@ export const getHabits = async () => {
         userId: userId,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: "asc",
       },
     });
     return habits;

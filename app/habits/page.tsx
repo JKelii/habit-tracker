@@ -8,34 +8,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { ListChecks } from "lucide-react";
-import { HabitsType } from "../types/HabitsTypes";
 import LoadingHabitsList from "@/components/Pages/Habits/LoadingHabitsList";
-
-type ApiResponse = {
-  habits: HabitsType;
-};
-
-const fetchHabits = async (): Promise<ApiResponse> => {
-  const res = await fetch(`/api/routes/habits`);
-  if (!res.ok) throw new Error("Can't fetch items");
-  const data = await res.json();
-  return data;
-};
+import axios from "axios";
+import type { HabitsPage } from "../types/HabitsTypes";
+import { InfiniteScrollContainer } from "@/components/Pages/Habits/InfiniteScrollContainer";
 
 const HabitsPage = () => {
-  const { data, isLoading, error } = useQuery<ApiResponse>({
-    queryKey: ["habits"],
-    queryFn: fetchHabits,
-  });
+  const { data, isLoading, error, hasNextPage, isFetching, fetchNextPage } =
+    useInfiniteQuery({
+      queryKey: ["habits"],
+      queryFn: async ({ pageParam }) => {
+        const response = await axios.get<HabitsPage>("/api/routes/habits", {
+          params: pageParam ? { cursor: pageParam } : {},
+        });
+        return response.data;
+      },
+      initialPageParam: null as string | null,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    });
 
   if (isLoading) return <LoadingHabitsList />;
   if (error instanceof Error)
     return <p className="text-destructive text-sm">Error: {error.message}</p>;
 
-  const habits = data?.habits ?? [];
-  console.log("To jest habit", habits);
+  const habits = data?.pages.flatMap((page) => page.habits) || [];
 
   return (
     <main className="flex flex-col justify-center items-center p-4">
@@ -48,7 +46,14 @@ const HabitsPage = () => {
         </CardHeader>
         <CardContent className="self-start flex flex-col w-full justify-center items-center">
           <AddHabit />
-          <HabitsList habits={habits} />
+          <InfiniteScrollContainer
+            className="space-y-5 w-full flex flex-col"
+            onBottomReached={() =>
+              hasNextPage && !isFetching && fetchNextPage()
+            }
+          >
+            <HabitsList habits={habits} />
+          </InfiniteScrollContainer>
         </CardContent>
       </Card>
     </main>

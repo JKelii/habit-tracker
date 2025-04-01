@@ -1,6 +1,4 @@
-import { getPomodoros } from "@/actions/pomodoro";
-import { PomodoroStats } from "@/components/Pages/Pomodoro/PomodoroStats/PomodoroStats";
-import { PomodoroTimer } from "@/components/Pages/Pomodoro/PomodoroTimer/PomodoroTimer";
+import { PomodoroList } from "@/components/Pages/Pomodoro/PomodoroList";
 import {
   Card,
   CardContent,
@@ -8,21 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { Timer } from "lucide-react";
 
-import React from "react";
-
-const page = async () => {
-  const pomodoros = await getPomodoros();
-  const pomodorosFinishedToday = pomodoros?.map((pomodoro) =>
-    pomodoro.finished.toLocaleDateString()
-  );
-  const today = new Date().toLocaleDateString();
-  const finishedToday = pomodorosFinishedToday?.filter(
-    (pomodoro) => pomodoro === today
-  );
-
+const page = () => {
   return (
     <main className="flex h-[95%] justify-center items-center p-4 w-full">
       <Card className="w-full h-full flex flex-col justify-center items-center">
@@ -32,9 +18,8 @@ const page = async () => {
           </CardTitle>
           <CardDescription>Track time with pomodoro technique</CardDescription>
         </CardHeader>
-        <CardContent className="flex w-full items-center">
-          <PomodoroTimer finishedToday={finishedToday} />
-          <PomodoroStats pomodoros={pomodoros} />
+        <CardContent className="flex w-full h-full items-center">
+          <PomodoroList />
         </CardContent>
       </Card>
     </main>

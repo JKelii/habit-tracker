@@ -6,6 +6,7 @@ import { TodosList } from "./TodosList";
 import { TodoGridStats } from "../GridStats/TodoGridStats";
 import TodosLoadingSkeleton from "./TodosLoadingSkeleton";
 import { useState } from "react";
+import axios from "axios";
 
 type ApiResponse = {
   todos: Todo[];
@@ -20,12 +21,10 @@ const fetchTodos = async (
   page: number,
   pageSize: number
 ): Promise<ApiResponse> => {
-  const res = await fetch(
+  const res = await axios.get(
     `/api/routes/todos?page=${page}&pageSize=${pageSize}`
   );
-  if (!res.ok) throw new Error("Error fetching data");
-  const data = await res.json();
-  return data;
+  return res.data;
 };
 
 export const TodosPage = () => {

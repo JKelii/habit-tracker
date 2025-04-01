@@ -11,3 +11,8 @@ export type HabitType = {
 };
 
 export type HabitsType = HabitType[];
+
+export type HabitsPage = {
+  habits: HabitsType;
+  nextCursor: string | null;
+};
