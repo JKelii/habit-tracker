@@ -17,9 +17,13 @@ type FormData = {
 
 type SelectPriorityType = {
   setValue: UseFormSetValue<FormData>;
+  matrix: string;
 };
 
-export const SelectModifyPriority = ({ setValue }: SelectPriorityType) => {
+export const SelectModifyPriority = ({
+  setValue,
+  matrix,
+}: SelectPriorityType) => {
   const handleValueChange = (value: string) => {
     setValue("matrix", value);
   };
@@ -29,7 +33,7 @@ export const SelectModifyPriority = ({ setValue }: SelectPriorityType) => {
       <Label htmlFor="matrix" className="self-start my-2 text-xs">
         Priority
       </Label>
-      <Select onValueChange={handleValueChange}>
+      <Select onValueChange={handleValueChange} defaultValue={matrix}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Select priority" />
         </SelectTrigger>

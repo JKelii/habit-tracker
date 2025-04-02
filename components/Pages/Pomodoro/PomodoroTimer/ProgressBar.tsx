@@ -13,7 +13,7 @@ export const ProgressBar = ({
 }: {
   finishedToday: string[] | undefined;
 }) => {
-  const totalTime = 1;
+  const totalTime = 1500;
 
   const [isRunning, setIsRunning] = useState(false);
   const [timer, setTimer] = useState(totalTime);

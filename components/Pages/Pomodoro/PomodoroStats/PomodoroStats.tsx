@@ -9,6 +9,7 @@ import {
   InfiniteData,
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
+import { TotalHours } from "./TotalHours";
 
 type PomodoroStatsProps = {
   pomodoros: PomodorosType;
@@ -27,12 +28,6 @@ export const PomodoroStats = ({
   fetchNextPage,
   isFetching,
 }: PomodoroStatsProps) => {
-  if (!pomodoros) return null;
-
-  const totalMinutes = pomodoros.length * 25;
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-
   const groupedByDate = pomodoros.reduce<Record<string, typeof pomodoros>>(
     (acc, pomodoro) => {
       const dateKey = new Date(pomodoro.createdAt).toLocaleDateString();
@@ -51,12 +46,7 @@ export const PomodoroStats = ({
 
   return (
     <CardContent className=" w-1/2 h-full flex flex-col justify-start mt-10 items-center">
-      <div className="flex items-center gap-1 ">
-        <p className="text-sm text-muted-foreground">Total pomodoro time:</p>
-        <p className="text-sm text-black dark:text-white font-semibold">
-          {hours}h {minutes}m
-        </p>
-      </div>
+      <TotalHours />
       <Separator className="my-5 w-56" />
       <InfiniteScrollContainer
         className="py-5"

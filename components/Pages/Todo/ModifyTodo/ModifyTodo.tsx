@@ -21,6 +21,7 @@ import { SelectModifyPriority } from "./SelectModifyPriority";
 type ModifyTodoType = {
   title: string;
   id: string;
+  matrix: string;
 };
 
 type formData = {
@@ -28,7 +29,7 @@ type formData = {
   matrix: string;
 };
 
-export const ModifyTodo = ({ title, id }: ModifyTodoType) => {
+export const ModifyTodo = ({ title, id, matrix }: ModifyTodoType) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutate } = useModifyTodo();
@@ -72,7 +73,7 @@ export const ModifyTodo = ({ title, id }: ModifyTodoType) => {
                 Title is required
               </p>
             )}
-            <SelectModifyPriority setValue={setValue} />
+            <SelectModifyPriority setValue={setValue} matrix={matrix} />
             {errors.matrix && (
               <p className="text-sm text-red-500  font-semibold self-start">
                 Priority is required

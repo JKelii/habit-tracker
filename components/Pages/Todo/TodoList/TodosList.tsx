@@ -1,17 +1,15 @@
 "use client";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import { DeleteTodo } from "../ModifyTodo/DeleteTodo";
 import { ModifyTodo } from "../ModifyTodo/ModifyTodo";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { CategoryBadges } from "./CategoryBadges";
 import { TodoDates } from "./TodoDates";
 import { Todo } from "@prisma/client";
 import { TodoPagination } from "./TablePagination";
 import { AddToDo } from "../ModifyTodo/AddToDo/AddToDo";
-import { useSetComplete } from "../hooks/useSetComplete";
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { Dispatch, SetStateAction } from "react";
+import { TodoTitles } from "./TodoTitles";
 
 type TodoListProps = {
   todos: Todo[];
@@ -26,15 +24,6 @@ export const TodosList = ({
   page,
   setPage,
 }: TodoListProps) => {
-  const { mutate } = useSetComplete();
-
-  const setStatus = useCallback(
-    async (id: string, complete: boolean) => {
-      mutate({ id, complete });
-    },
-    [mutate]
-  );
-
   return (
     <>
       <Card className="w-full mt-2">
@@ -56,33 +45,23 @@ export const TodosList = ({
                     todo.matrix === "4" && "border-l-4 border-l-green-500"
                   )}
                 >
-                  <div className="flex items-center gap-8">
-                    <Checkbox
-                      checked={todo.completed}
-                      onCheckedChange={() => setStatus(todo.id, todo.completed)}
-                      className="ml-2"
-                    />
-                    <article className="flex flex-col justify-center w-44 items-center">
-                      <p
-                        className={cn(
-                          "self-start text-sm font-semibold",
-                          todo.completed && "line-through"
-                        )}
-                      >
-                        {todo.title}
-                      </p>
-                      <CategoryBadges
-                        category={todo.category}
-                        matrix={todo.matrix}
-                      />
-                    </article>
-                  </div>
+                  <TodoTitles
+                    completed={todo.completed}
+                    matrix={todo.matrix}
+                    id={todo.id}
+                    title={todo.title}
+                    category={todo.category}
+                  />
                   <TodoDates
                     createdAt={todo.createdAt}
                     deadline={todo.toBeDone}
                   />
                   <div className="flex items-center gap-1">
-                    <ModifyTodo title={todo.title} id={todo.id} />
+                    <ModifyTodo
+                      title={todo.title}
+                      id={todo.id}
+                      matrix={todo.matrix}
+                    />
                     <DeleteTodo todoId={todo.id} />
                   </div>
                 </section>

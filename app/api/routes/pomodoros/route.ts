@@ -1,6 +1,5 @@
 import { prisma } from "@/app/lib/db";
 import { PomodorosPage } from "@/app/types/Pomodoro";
-
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,7 +7,7 @@ export async function GET(req: NextRequest) {
   try {
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
 
-    const pageSize = 10;
+    const pageSize = 20;
 
     const user = await auth();
     const userId = user.userId;

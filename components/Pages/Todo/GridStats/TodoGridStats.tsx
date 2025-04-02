@@ -1,19 +1,24 @@
 import { BookType, CheckCircle2, Clock } from "lucide-react";
 import { GridCard } from "./GridCard";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { TodoStatsApiResponse } from "@/app/types/TodosTypes";
 
-type TodoGridStatsProps = {
-  completeTillToday: number | undefined;
-  uniqueCategoriesCount: number | undefined;
-  completedTodos: number | undefined;
-  totalCount: number | undefined;
-};
+export const TodoGridStats = () => {
+  const { data } = useQuery({
+    queryKey: ["todos", "todoStats"],
+    queryFn: async () => {
+      const response = await axios.get<TodoStatsApiResponse>(
+        "/api/routes/todos/stats"
+      );
+      return response.data;
+    },
+  });
 
-export const TodoGridStats = ({
-  completeTillToday,
-  uniqueCategoriesCount,
-  completedTodos = 0,
-  totalCount = 0,
-}: TodoGridStatsProps) => {
+  const totalCount = data?.totalCount ?? 0;
+  const completedTodos = data?.completedTodos ?? 0;
+  const uniqueCategoriesCount = data?.uniqueCategoriesCount;
+  const completeTillToday = data?.completeTillToday;
   const completedOutOfAll =
     totalCount > 0
       ? Number(((completedTodos / totalCount) * 100).toFixed(0))

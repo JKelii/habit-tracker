@@ -4,6 +4,7 @@ import { PomodoroStats } from "./PomodoroStats/PomodoroStats";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { PomodorosPage } from "@/app/types/Pomodoro";
+import { LoadingPomodoroList } from "./LoadingPomodoroList";
 
 export const PomodoroList = () => {
   const { data, isLoading, error, isFetching, hasNextPage, fetchNextPage } =
@@ -22,15 +23,11 @@ export const PomodoroList = () => {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     });
 
-  if (isLoading)
-    return (
-      <div className="w-full flex justify-cencter items-center ">
-        <div className="w-1/2  text-center">Loading...</div>
-        <div className="w-1/2 text-center ">Loading...</div>
-      </div>
-    );
+  if (isLoading) return <LoadingPomodoroList />;
   if (error instanceof Error)
-    return <p className="text-destructive text-sm">Error: {error.message}</p>;
+    return (
+      <p className="text-destructive text-sm mx-auto">Error: {error.message}</p>
+    );
 
   const pomodoros = data?.pages.flatMap((page) => page.pomodoros) || [];
 

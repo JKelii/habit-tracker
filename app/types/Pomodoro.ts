@@ -35,3 +35,7 @@ export type PomodorosPage = {
   pomodoros: PomodorosType;
   nextCursor: string | null;
 };
+
+export type PomodoroTotal = {
+  totalHours: number;
+};

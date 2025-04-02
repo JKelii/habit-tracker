@@ -5,8 +5,9 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/Sidebar/AppSidebar";
 import { Providers } from "@/components/Providers/Providers";
 import { ThemeProvider } from "@/components/Providers/ThemeProvider";
-import { ClerkProvider } from "@clerk/nextjs";
+
 import { ReactQueryClientProvider } from "@/components/Providers/QueryClientProvider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

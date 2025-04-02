@@ -1,4 +1,3 @@
-import { PomodoroList } from "@/components/Pages/Pomodoro/PomodoroList";
 import {
   Card,
   CardContent,
@@ -7,6 +6,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Timer } from "lucide-react";
+import { Metadata } from "next";
+import dynamic from "next/dynamic";
+
+export const metadata: Metadata = {
+  title: "Habit Tracker Pomodoro Timer",
+};
+
+const PomodoroList = dynamic(() =>
+  import("@/components/Pages/Pomodoro/PomodoroList").then(
+    (mod) => mod.PomodoroList
+  )
+);
 
 const page = () => {
   return (
@@ -18,7 +29,7 @@ const page = () => {
           </CardTitle>
           <CardDescription>Track time with pomodoro technique</CardDescription>
         </CardHeader>
-        <CardContent className="flex w-full h-full items-center">
+        <CardContent className="flex flex-col md:flex-row w-full h-full items-center ">
           <PomodoroList />
         </CardContent>
       </Card>
