@@ -30,7 +30,7 @@ export const GridCard = ({
             {stat}
             {operator}
           </p>
-          {completedStat ? (
+          {!statDescription ? (
             <p className="text-xs text-muted-foreground h-2">
               {completedStat} of {completedStatLength} tasks
             </p>

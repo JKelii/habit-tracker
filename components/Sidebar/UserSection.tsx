@@ -1,7 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
 import Link from "next/link";
 
 export const UserSection = () => {
@@ -25,6 +31,9 @@ export const UserSection = () => {
       ) : (
         <>
           <SignedOut>
+            <Button asChild size={"sm"} variant={"outline"}>
+              <SignInButton />
+            </Button>
             <Button asChild size={"sm"}>
               <Link href={"/sign-up"}>Sign up</Link>
             </Button>
