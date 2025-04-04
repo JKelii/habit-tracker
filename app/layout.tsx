@@ -30,11 +30,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider signUpFallbackRedirectUrl={"/create-profile"}>
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ClerkProvider signUpFallbackRedirectUrl={"/create-profile"}>
           <ReactQueryClientProvider>
             <ThemeProvider
               attribute="class"
@@ -51,8 +51,8 @@ export default function RootLayout({
               </Providers>
             </ThemeProvider>
           </ReactQueryClientProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

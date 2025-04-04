@@ -19,7 +19,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { todoSchema } from "@/app/schema/newTodoSchema";
 import { toast } from "sonner";
 import { SelectPriority } from "./SelectPriority";
-import { SelectCategory } from "../../TodoList/SelectCategory";
+import { SelectCategory } from "./SelectCategory";
 import { DatePicker } from "./DatePicker";
 import { useAddTodo } from "../../hooks/useAddTodo";
 import LoadingButton from "@/components/Universal/LoadingButton";
@@ -123,7 +123,7 @@ export const AddToDo = () => {
                     <SelectPriority setValue={setValue} />
                     {errors.matrix && (
                       <p className="ml-1 text-sm text-red-500 font-semibold self-start">
-                        Select priority
+                        Priority is required
                       </p>
                     )}
                   </div>
@@ -131,7 +131,7 @@ export const AddToDo = () => {
                     <SelectCategory setValue={setValue} />
                     {errors.category && (
                       <p className="ml-1 text-sm text-red-500 font-semibold self-start">
-                        Select priority
+                        Category is required
                       </p>
                     )}
                   </div>

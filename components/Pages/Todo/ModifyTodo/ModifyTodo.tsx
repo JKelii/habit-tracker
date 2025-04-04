@@ -49,7 +49,7 @@ export const ModifyTodo = ({ title, id, matrix }: ModifyTodoType) => {
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button variant={"outline"}>
+          <Button variant={"outline"} data-testid="modify">
             <SquarePen />
           </Button>
         </DialogTrigger>

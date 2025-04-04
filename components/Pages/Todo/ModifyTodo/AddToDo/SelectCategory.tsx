@@ -29,11 +29,15 @@ export const SelectCategory = ({ setValue }: SelectCategoryType) => {
 
   return (
     <>
-      <Label htmlFor="category" className="self-start my-2 text-xs">
+      <Label id="category" className="self-start my-2 text-xs">
         Category
       </Label>
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger
+          className="w-full"
+          aria-labelledby="category"
+          data-testid="category"
+        >
           <SelectValue placeholder="Select category" />
         </SelectTrigger>
         <SelectContent>

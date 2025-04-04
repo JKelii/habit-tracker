@@ -79,7 +79,7 @@ export const AddHabit = () => {
             <Input id="title" {...register("title")} placeholder="Reading" />
             {errors.title && (
               <p className="text-sm text-red-500 py-1 font-semibold self-start">
-                This field is required
+                Title is required
               </p>
             )}
             <Label htmlFor="description">Description</Label>
@@ -90,7 +90,7 @@ export const AddHabit = () => {
             />
             {errors.description && (
               <p className="text-sm text-red-500 py-1 font-semibold self-start">
-                Description should be shorter
+                Description is required
               </p>
             )}
 

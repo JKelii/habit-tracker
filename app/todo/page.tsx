@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ListTodo } from "lucide-react";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
+import React from "react";
 
 export const metadata: Metadata = {
   title: "Habit Tracker Todo",
@@ -13,7 +14,7 @@ const TodosPage = dynamic(() =>
   )
 );
 
-const page = () => {
+const Todos = () => {
   return (
     <div className="flex flex-col justify-center items-center px-2 min-w-[760px]">
       <Card className="w-full flex flex-col justify-center items-center ">
@@ -30,4 +31,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Todos;

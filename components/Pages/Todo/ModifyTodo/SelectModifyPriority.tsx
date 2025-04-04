@@ -34,7 +34,7 @@ export const SelectModifyPriority = ({
         Priority
       </Label>
       <Select onValueChange={handleValueChange} defaultValue={matrix}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full" data-testid="modifyPriority">
           <SelectValue placeholder="Select priority" />
         </SelectTrigger>
         <SelectContent>

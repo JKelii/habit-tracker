@@ -32,7 +32,7 @@ export const DeleteTodo = ({ todoId }: { todoId: string }) => {
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button variant={"outline"}>
+          <Button variant={"outline"} data-testid="delete">
             <Trash2 className="text-red-500" />
           </Button>
         </DialogTrigger>

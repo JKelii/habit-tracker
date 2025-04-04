@@ -28,11 +28,16 @@ export const SelectPriority = ({ setValue }: SelectPriorityType) => {
 
   return (
     <>
-      <Label htmlFor="matrix" className="self-start my-2 text-xs">
+      <Label htmlFor="priority" className="self-start my-2 text-xs ">
         Priority
       </Label>
-      <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-full">
+      <Select onValueChange={handleValueChange} name="Priority">
+        <SelectTrigger
+          id="priority"
+          className="w-full pointer-events-auto"
+          aria-labelledby="priority"
+          data-testid="priority"
+        >
           <SelectValue placeholder="Select priority" />
         </SelectTrigger>
         <SelectContent>
