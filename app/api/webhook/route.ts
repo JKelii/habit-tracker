@@ -18,9 +18,11 @@ export async function POST(request: NextRequest) {
       webhookSecret
     );
     console.log("Event successfully constructed:", event.type);
-  } catch (error) {
-    console.error("Error constructing event:", error);
-    return NextResponse.json({ error: error }, { status: 400 });
+  } catch (error: unknown) {
+    // Type assertion to 'Error'
+    const err = error as Error;
+    console.error("Error constructing event:", err.message);
+    return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
   try {
@@ -47,9 +49,10 @@ export async function POST(request: NextRequest) {
       default:
         console.log("Unhandled event type", event.type);
     }
-  } catch (error) {
-    console.error("Error processing event:", error);
-    return NextResponse.json({ error: error }, { status: 400 });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error processing event:", err.message);
+    return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
   return NextResponse.json({});
@@ -85,8 +88,9 @@ async function handleCheckoutSessionCompleted(
       },
     });
     console.log(`User ${userId} subscription updated`);
-  } catch (error) {
-    console.error("Error updating user subscription:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error updating user subscription:", err.message);
   }
 }
 
@@ -113,9 +117,10 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
 
     userID = user.userId;
     console.log("User found, userID:", userID);
-  } catch (error) {
-    console.error("Error finding user by subscription ID:", error);
-    return NextResponse.json({ error: error }, { status: 400 });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error finding user by subscription ID:", err.message);
+    return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
   try {
@@ -125,9 +130,10 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
       data: { subscriptionActive: false },
     });
     console.log(`User ${userID} subscription deactivated`);
-  } catch (error) {
-    console.error("Error deactivating user subscription:", error);
-    return NextResponse.json({ error: error }, { status: 400 });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error deactivating user subscription:", err.message);
+    return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
 
@@ -153,9 +159,10 @@ async function handleCustomerSubscriptionDeleted(
 
     userID = user.userId;
     console.log("User found, userID:", userID);
-  } catch (error) {
-    console.error("Error finding user by subscription ID:", error);
-    return NextResponse.json({ error: error }, { status: 400 });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error finding user by subscription ID:", err.message);
+    return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
   try {
@@ -169,8 +176,9 @@ async function handleCustomerSubscriptionDeleted(
       },
     });
     console.log(`User ${userID} subscription deleted`);
-  } catch (error) {
-    console.error("Error deleting user subscription:", error);
-    return NextResponse.json({ error: error }, { status: 400 });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error deleting user subscription:", err.message);
+    return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
