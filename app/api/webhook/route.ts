@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe";
 import { prisma } from "@/app/lib/db";
 
 export async function POST(request: NextRequest) {
-  const body = await request.blob();
+  const body = await request.arrayBuffer();
   const signature = request.headers.get("stripe-signature");
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
   try {
     event = stripe.webhooks.constructEvent(
-      await body.text(),
+      Buffer.from(body),
       signature || "",
       webhookSecret
     );
