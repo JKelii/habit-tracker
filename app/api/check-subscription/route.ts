@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
-
+    console.log(user);
     return NextResponse.json({ subscriptionActive: user.subscriptionActive });
   } catch (error: unknown) {
     if (error instanceof Error) {

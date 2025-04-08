@@ -15,7 +15,8 @@ export const BillingButtons = ({
         <button
           className={cn(
             "rounded-full text-xs px-2 py-1 font-semibold",
-            !isYearly && "bg-white text-black px-4"
+            !isYearly &&
+              "dark:bg-white dark:text-black bg-black text-white px-4 "
           )}
           onClick={() => setIsYearly(false)}
         >
@@ -24,7 +25,7 @@ export const BillingButtons = ({
         <button
           className={cn(
             "rounded-full text-xs px-2 py-1 font-semibold",
-            isYearly && "bg-white text-black px-4"
+            isYearly && "dark:bg-white dark:text-black bg-black text-white px-4"
           )}
           onClick={() => setIsYearly(true)}
         >
