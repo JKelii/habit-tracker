@@ -33,6 +33,7 @@ const subscribeToPlan = async (
 
   if (!response.ok) {
     const errorData: SubscribeError = await response.json();
+    console.error("Error in /api/checkout:", errorData.error);
     throw new Error(errorData.error || "Something went wrong");
   }
 

@@ -6,6 +6,10 @@ export const POST = async (request: NextRequest) => {
   try {
     const { planType, userID, email } = await request.json();
 
+    console.log("Received planType:", planType);
+    console.log("Received userID:", userID);
+    console.log("Received email:", email);
+
     if (!planType || !userID || !email) {
       return NextResponse.json(
         { error: "Plan type, userID and email are required " },
@@ -22,9 +26,8 @@ export const POST = async (request: NextRequest) => {
     const priceID = getPriceIDFromType(planType);
 
     if (!priceID) {
-      {
-        return NextResponse.json({ error: "Invalid PriceID" }, { status: 400 });
-      }
+      console.error("Invalid PriceID");
+      return NextResponse.json({ error: "Invalid PriceID" }, { status: 400 });
     }
 
     const session = await stripe.checkout.sessions.create({
@@ -43,8 +46,8 @@ export const POST = async (request: NextRequest) => {
     });
 
     return NextResponse.json({ url: session.url });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
+    console.error("Error in /api/checkout:", error);
     return NextResponse.json(
       { error: "Internal Server Error." },
       { status: 500 }

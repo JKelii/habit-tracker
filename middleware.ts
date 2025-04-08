@@ -25,7 +25,7 @@ export default clerkMiddleware(async (auth, req) => {
     pathname.startsWith("/api/webhook") ||
     pathname.startsWith("/api/checkout")
   ) {
-    return NextResponse.next(); // NIE dotykaj webhooka ani checkouta
+    return NextResponse.next();
   }
   const userAuth = await auth();
   const { userId } = userAuth;
