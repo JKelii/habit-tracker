@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   const signature = request.headers.get("stripe-signature");
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-
+  console.log("Stripe signature:", signature);
   let event: Stripe.Event;
 
   try {
@@ -17,33 +17,41 @@ export async function POST(request: NextRequest) {
       signature || "",
       webhookSecret
     );
+    console.log("Event successfully constructed:", event.type);
   } catch (error) {
+    console.error("Error constructing event:", error);
     return NextResponse.json({ error: error }, { status: 400 });
   }
-  //TODO: USUNAC ASERCJE
+
   try {
+    console.log("Received event:", event.type);
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
+        console.log("Checkout session completed:", session);
         await handleCheckoutSessionCompleted(session);
         break;
       }
       case "invoice.payment_failed": {
-        const session = event.data.object as Stripe.Invoice;
-        await handleInvoicePaymentFailed(session);
+        const invoice = event.data.object as Stripe.Invoice;
+        console.log("Invoice payment failed:", invoice);
+        await handleInvoicePaymentFailed(invoice);
         break;
       }
       case "customer.subscription.deleted": {
-        const session = event.data.object as Stripe.Subscription;
-        await handleCustomerSubscriptionDeleted(session);
+        const subscription = event.data.object as Stripe.Subscription;
+        console.log("Customer subscription deleted:", subscription);
+        await handleCustomerSubscriptionDeleted(subscription);
         break;
       }
       default:
-        console.log("Unhandled event type" + event.type);
+        console.log("Unhandled event type", event.type);
     }
   } catch (error) {
+    console.error("Error processing event:", error);
     return NextResponse.json({ error: error }, { status: 400 });
   }
+
   return NextResponse.json({});
 }
 
@@ -53,17 +61,21 @@ async function handleCheckoutSessionCompleted(
   const userId = session.metadata?.clerkUserId;
   const planType = session.metadata?.planType;
 
+  console.log("Handling checkout session completion:", { userId, planType });
+
   if (!userId) {
-    console.log("No user id");
+    console.log("No user id in session");
     return;
   }
+
   const subscriptionId = session.subscription as string;
   if (!subscriptionId) {
-    console.log("No user id");
+    console.log("No subscription id in session");
     return;
   }
 
   try {
+    console.log(`Updating user ${userId} subscription in the database`);
     await prisma.user.update({
       where: { userId },
       data: {
@@ -72,8 +84,9 @@ async function handleCheckoutSessionCompleted(
         subscriptionTier: planType || null,
       },
     });
+    console.log(`User ${userId} subscription updated`);
   } catch (error) {
-    console.log(error);
+    console.error("Error updating user subscription:", error);
   }
 }
 
@@ -81,32 +94,39 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   const subID = invoice.subscription as string;
 
   if (!subID) {
+    console.log("No subscription ID in invoice");
     return;
   }
 
   let userID: string | undefined;
   try {
+    console.log(`Looking up user with subscription ID: ${subID}`);
     const user = await prisma.user.findUnique({
       where: { stripeSubscriptionId: subID },
       select: { userId: true },
     });
 
     if (!user?.userId) {
-      console.log("No profile found");
+      console.log("No profile found for subscription ID:", subID);
       return;
     }
 
     userID = user.userId;
+    console.log("User found, userID:", userID);
   } catch (error) {
+    console.error("Error finding user by subscription ID:", error);
     return NextResponse.json({ error: error }, { status: 400 });
   }
 
   try {
+    console.log(`Deactivating subscription for user ${userID}`);
     await prisma.user.update({
       where: { userId: userID },
       data: { subscriptionActive: false },
     });
+    console.log(`User ${userID} subscription deactivated`);
   } catch (error) {
+    console.error("Error deactivating user subscription:", error);
     return NextResponse.json({ error: error }, { status: 400 });
   }
 }
@@ -116,24 +136,30 @@ async function handleCustomerSubscriptionDeleted(
 ) {
   const subID = subscription.id;
 
+  console.log("Handling subscription deletion:", subID);
+
   let userID: string | undefined;
   try {
+    console.log(`Looking up user with subscription ID: ${subID}`);
     const user = await prisma.user.findUnique({
       where: { stripeSubscriptionId: subID },
       select: { userId: true },
     });
 
     if (!user?.userId) {
-      console.log("No profile found");
+      console.log("No profile found for subscription ID:", subID);
       return;
     }
 
     userID = user.userId;
+    console.log("User found, userID:", userID);
   } catch (error) {
+    console.error("Error finding user by subscription ID:", error);
     return NextResponse.json({ error: error }, { status: 400 });
   }
 
   try {
+    console.log(`Deactivating subscription for user ${userID}`);
     await prisma.user.update({
       where: { userId: userID },
       data: {
@@ -142,7 +168,9 @@ async function handleCustomerSubscriptionDeleted(
         subscriptionTier: null,
       },
     });
+    console.log(`User ${userID} subscription deleted`);
   } catch (error) {
+    console.error("Error deleting user subscription:", error);
     return NextResponse.json({ error: error }, { status: 400 });
   }
 }
