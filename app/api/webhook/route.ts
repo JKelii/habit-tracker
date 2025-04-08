@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe";
 import { prisma } from "@/app/lib/db";
 
 export async function POST(request: NextRequest) {
-  const body = await request.text();
+  const body = await request.blob();
   const signature = request.headers.get("stripe-signature");
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -13,13 +13,12 @@ export async function POST(request: NextRequest) {
 
   try {
     event = stripe.webhooks.constructEvent(
-      body,
+      await body.text(),
       signature || "",
       webhookSecret
     );
     console.log("Event successfully constructed:", event.type);
   } catch (error: unknown) {
-    // Type assertion to 'Error'
     const err = error as Error;
     console.error("Error constructing event:", err.message);
     return NextResponse.json({ error: err.message }, { status: 400 });
