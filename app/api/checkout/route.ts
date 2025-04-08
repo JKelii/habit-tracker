@@ -45,6 +45,7 @@ export const POST = async (request: NextRequest) => {
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/premium`,
     });
 
+    console.log("Stripe Session URL:", session.url);
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error("Error in /api/checkout:", error);
