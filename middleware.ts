@@ -19,9 +19,17 @@ const isPublicRoute = createRouteMatcher([
 // ]);
 
 export default clerkMiddleware(async (auth, req) => {
+  const { pathname } = req.nextUrl;
+
+  if (
+    pathname.startsWith("/api/webhook") ||
+    pathname.startsWith("/api/checkout")
+  ) {
+    return NextResponse.next(); // NIE dotykaj webhooka ani checkouta
+  }
   const userAuth = await auth();
   const { userId } = userAuth;
-  const { pathname, origin } = req.nextUrl;
+  const { origin } = req.nextUrl;
 
   if (pathname.startsWith("/api/check-subscription")) {
     return NextResponse.next();
