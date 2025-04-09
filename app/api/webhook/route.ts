@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/app/lib/db";
+import { buffer } from "micro";
 
 export const config = {
   api: {
@@ -11,8 +12,8 @@ export const config = {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.text();
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rawBody = await buffer(request.body as any);
     const signature = request.headers.get("stripe-signature");
 
     if (!signature) {
@@ -33,14 +34,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("Body length:", body.length);
+    console.log("Body length:", rawBody.length);
     console.log("Signature length:", signature.length);
     console.log("Secret length:", webhookSecret.length);
 
     let event: Stripe.Event;
 
     try {
-      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+      event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
       console.log("Event successfully constructed:", event.type);
     } catch (error: unknown) {
       const err = error as Error;
