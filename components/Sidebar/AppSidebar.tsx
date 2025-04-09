@@ -100,11 +100,11 @@ export const AppSidebar = () => {
               PREMIUM
             </SidebarGroupLabel>
             <SidebarMenu>
-              <SidebarMenuItem>
+              <SidebarMenuItem className="w-full">
                 <SidebarMenuButton>
                   <Link
                     href={"/premium"}
-                    className="flex justify-center items-center text-sm gap-1 w-full"
+                    className="flex justify-start items-center text-sm gap-1 w-full"
                   >
                     {" "}
                     <ChartArea />
