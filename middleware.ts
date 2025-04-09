@@ -11,7 +11,6 @@ const isPublicRoute = createRouteMatcher([
 export default clerkMiddleware(async (auth, req) => {
   const { pathname } = req.nextUrl;
 
-  // Handle API routes that need to bypass authentication
   if (pathname.startsWith("/api/check-subscription")) {
     return NextResponse.next();
   }
@@ -42,11 +41,6 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    // This pattern excludes:
-    // - Next.js static files (_next)
-    // - API webhook routes (/api/webhook)
-    // - API checkout routes (/api/checkout)
-    // - Static files with common extensions
     "/((?!_next|api/webhook|api/checkout|.*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
   ],
 };

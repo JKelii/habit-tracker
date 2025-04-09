@@ -3,58 +3,89 @@ import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/app/lib/db";
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 export async function POST(request: NextRequest) {
-  const body = await request.text();
-  const signature = request.headers.get("stripe-signature");
-
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-  console.log("Stripe signature:", signature);
-  let event: Stripe.Event;
-
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature || "",
-      webhookSecret
-    );
-    console.log("Event successfully constructed:", event.type);
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error constructing event:", err.message);
-    return NextResponse.json({ error: err.message }, { status: 400 });
-  }
+    const body = await request.text();
 
-  try {
-    console.log("Received event:", event.type);
-    switch (event.type) {
-      case "checkout.session.completed": {
-        const session = event.data.object as Stripe.Checkout.Session;
-        console.log("Checkout session completed:", session);
-        await handleCheckoutSessionCompleted(session);
-        break;
-      }
-      case "invoice.payment_failed": {
-        const invoice = event.data.object as Stripe.Invoice;
-        console.log("Invoice payment failed:", invoice);
-        await handleInvoicePaymentFailed(invoice);
-        break;
-      }
-      case "customer.subscription.deleted": {
-        const subscription = event.data.object as Stripe.Subscription;
-        console.log("Customer subscription deleted:", subscription);
-        await handleCustomerSubscriptionDeleted(subscription);
-        break;
-      }
-      default:
-        console.log("Unhandled event type", event.type);
+    const signature = request.headers.get("stripe-signature");
+
+    if (!signature) {
+      console.error("No Stripe signature found in headers");
+      return NextResponse.json(
+        { error: "No Stripe signature found" },
+        { status: 400 }
+      );
     }
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error processing event:", err.message);
-    return NextResponse.json({ error: err.message }, { status: 400 });
-  }
 
-  return NextResponse.json({});
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+    if (!webhookSecret) {
+      console.error("Webhook secret is not defined in environment variables");
+      return NextResponse.json(
+        { error: "Server configuration error" },
+        { status: 500 }
+      );
+    }
+
+    console.log("Body length:", body.length);
+    console.log("Signature length:", signature.length);
+    console.log("Secret length:", webhookSecret.length);
+
+    let event: Stripe.Event;
+
+    try {
+      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+      console.log("Event successfully constructed:", event.type);
+    } catch (error: unknown) {
+      const err = error as Error;
+      console.error("Error constructing event:", err.message);
+      return NextResponse.json({ error: err.message }, { status: 400 });
+    }
+
+    try {
+      console.log("Processing event:", event.type);
+      switch (event.type) {
+        case "checkout.session.completed": {
+          const session = event.data.object as Stripe.Checkout.Session;
+          console.log("Checkout session completed:", session);
+          await handleCheckoutSessionCompleted(session);
+          break;
+        }
+        case "invoice.payment_failed": {
+          const invoice = event.data.object as Stripe.Invoice;
+          console.log("Invoice payment failed:", invoice);
+          await handleInvoicePaymentFailed(invoice);
+          break;
+        }
+        case "customer.subscription.deleted": {
+          const subscription = event.data.object as Stripe.Subscription;
+          console.log("Customer subscription deleted:", subscription);
+          await handleCustomerSubscriptionDeleted(subscription);
+          break;
+        }
+        default:
+          console.log("Unhandled event type", event.type);
+      }
+
+      return NextResponse.json({ received: true });
+    } catch (error: unknown) {
+      const err = error as Error;
+      console.error("Error processing event:", err.message);
+      return NextResponse.json({ error: err.message }, { status: 400 });
+    }
+  } catch (error) {
+    console.error("Unexpected error in webhook handler:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
 
 async function handleCheckoutSessionCompleted(
