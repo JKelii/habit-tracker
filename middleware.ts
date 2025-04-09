@@ -5,40 +5,26 @@ const isPublicRoute = createRouteMatcher([
   "/",
   "/sign-up",
   "/premium",
-  "api/webhook(.*)",
   "/api/check-subscription(.*)",
 ]);
-
-// const isSignedUpUserRouter = createRouteMatcher([
-//   "/todo",
-//   "/habits",
-//   "/pomodoro",
-//   "/matrix",
-//   "api/webhook(.*)",
-//   "/api/check-subscription(.*)",
-// ]);
 
 export default clerkMiddleware(async (auth, req) => {
   const { pathname } = req.nextUrl;
 
-  if (
-    pathname.startsWith("/api/webhook") ||
-    pathname.startsWith("/api/checkout")
-  ) {
-    return NextResponse.next();
-  }
-  const userAuth = await auth();
-  const { userId } = userAuth;
-  const { origin } = req.nextUrl;
-
+  // Handle API routes that need to bypass authentication
   if (pathname.startsWith("/api/check-subscription")) {
     return NextResponse.next();
   }
+
+  const userAuth = await auth();
+  const { userId } = userAuth;
+  const { origin } = req.nextUrl;
 
   if (!isPublicRoute(req) && !userId) {
     return NextResponse.redirect(new URL("/sign-up", origin));
   }
 
+  // Uncomment the subscription check logic when you're ready to use it
   // if (isSignedUpUserRouter(req) && userId && !pathname.startsWith("/api/")) {
   //   try {
   //     const response = await fetch(
@@ -53,8 +39,14 @@ export default clerkMiddleware(async (auth, req) => {
   //   }
   // }
 });
+
 export const config = {
   matcher: [
-    "/((?!_next|.*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // This pattern excludes:
+    // - Next.js static files (_next)
+    // - API webhook routes (/api/webhook)
+    // - API checkout routes (/api/checkout)
+    // - Static files with common extensions
+    "/((?!_next|api/webhook|api/checkout|.*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
   ],
 };

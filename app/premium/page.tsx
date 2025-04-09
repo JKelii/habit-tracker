@@ -1,4 +1,10 @@
-import { PremiumComponent } from "@/components/Pages/Premium/PremiumComponent";
+import dynamic from "next/dynamic";
+
+const PremiumComponent = dynamic(() =>
+  import("@/components/Pages/Premium/PremiumComponent").then(
+    (mod) => mod.PremiumComponent
+  )
+);
 
 const page = () => {
   return (

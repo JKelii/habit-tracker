@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe";
 import { prisma } from "@/app/lib/db";
 
 export async function POST(request: NextRequest) {
-  const body = await request.arrayBuffer();
+  const body = await request.text();
   const signature = request.headers.get("stripe-signature");
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
   try {
     event = stripe.webhooks.constructEvent(
-      Buffer.from(body),
+      body,
       signature || "",
       webhookSecret
     );
@@ -78,7 +78,7 @@ async function handleCheckoutSessionCompleted(
 
   try {
     console.log(`Updating user ${userId} subscription in the database`);
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { userId },
       data: {
         stripeSubscriptionId: subscriptionId,
@@ -86,10 +86,9 @@ async function handleCheckoutSessionCompleted(
         subscriptionTier: planType || null,
       },
     });
-    console.log(`User ${userId} subscription updated`);
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error updating user subscription:", err.message);
+    console.log(`User ${userId} subscription updated`, updatedUser);
+  } catch (error) {
+    console.error("Error updating user subscription:", error);
   }
 }
 
